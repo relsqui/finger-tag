@@ -30,6 +30,7 @@ public class GameEngine implements Controller, Renderer {
     private List<EntityRenderer> enemyRenderers;
     private HUD hud = new HUD(this);
     private PlayerController playerController;
+    private int highScore = 0;
     private int score = 0;
     private long tick = 0;
 
@@ -57,7 +58,7 @@ public class GameEngine implements Controller, Renderer {
     }
 
     @Nullable
-    public Entity collidesWithEnemy(Entity e) {
+    private Entity collidesWithEnemy(Entity e) {
         for (Entity enemy : enemies) {
             if (e.overlaps(enemy)) {
                 return enemy;
@@ -73,6 +74,7 @@ public class GameEngine implements Controller, Renderer {
             score = 0;
         } else if (tick % 50 == 0) {
             score++;
+            if (score > highScore) highScore = score;
         }
     }
 
@@ -106,6 +108,10 @@ public class GameEngine implements Controller, Renderer {
 
     public int getWidth() {
         return width;
+    }
+
+    public int getHighScore() {
+        return highScore;
     }
 
     public int getScore() {
