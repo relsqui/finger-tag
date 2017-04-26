@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class FieldRenderer implements Renderer {
-    Paint bgPaint = new Paint();
+    private Paint bgPaint = new Paint();
 
     public FieldRenderer() {
         bgPaint.setColor(Color.BLACK);
