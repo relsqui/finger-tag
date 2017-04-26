@@ -8,7 +8,7 @@ class MainThread extends Thread {
     private static final String TAG = MainThread.class.getSimpleName();
     private static final int MAX_FPS = 50;
     private final long framePeriod;
-    private boolean running;
+    private boolean running = false;
     private final SurfaceHolder sh;
     private GameEngine game;
 
@@ -26,8 +26,11 @@ class MainThread extends Thread {
         this.running = running;
     }
 
+    boolean isRunning() { return running; }
+
     @Override
     public void run() {
+        Log.d(TAG, "Starting thread run.");
         while (running) {
             long startTime = System.nanoTime();
             Canvas canvas = null;

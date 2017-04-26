@@ -4,14 +4,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowInsets;
 
 public class MainView extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = MainView.class.getSimpleName();
@@ -23,20 +20,24 @@ public class MainView extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         thread = new MainThread(getHolder());
         setFocusable(true);
+        game = new GameEngine();
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        if (!thread.isRunning()) {
+            thread.setGame(game);
+            thread.setRunning(true);
+            thread.start();
+        }
+    }
 
     @TargetApi(17)
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Point realSize = new Point();
         getDisplay().getRealSize(realSize);
-        game = new GameEngine(realSize.x, realSize.y);
-        thread.setGame(game);
-        thread.setRunning(true);
-        thread.start();
+        game.setUp(realSize.x, realSize.y);
     }
 
     @Override

@@ -22,8 +22,8 @@ import java.util.Random;
 
 public class GameEngine implements Controller, Renderer {
     private static final Random random = new Random(System.currentTimeMillis());
-    private final int width;
-    private final int height;
+    private int width = 0;
+    private int height = 0;
     private Player player;
     private List<Entity> enemies = new ArrayList<>();
     private FieldRenderer fieldRenderer;
@@ -37,7 +37,7 @@ public class GameEngine implements Controller, Renderer {
     private long tick = 0;
 
 
-    GameEngine(int width, int height) {
+    public void setUp(int width, int height) {
         this.width = width;
         this.height = height;
         fieldRenderer = new FieldRenderer();
@@ -45,6 +45,10 @@ public class GameEngine implements Controller, Renderer {
         playerRenderer = new EntityRenderer(player, Color.GREEN, Paint.Style.FILL);
         playerController = new PlayerController(this, player);
         addEnemy();
+        for (int i=0; i<score; i+=5) {
+            // This comes up if we're recreating a game after a pause.
+            addEnemy();
+        }
     }
 
     void addEnemy() {
