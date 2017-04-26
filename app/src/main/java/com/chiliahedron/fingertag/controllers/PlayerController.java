@@ -25,8 +25,8 @@ public class PlayerController implements Controller {
     public void handleActionMove(MotionEvent event) {
         if (player.isTouched()) {
             float r = player.getRadius();
-            float x = Math.max(Math.min(event.getX(), game.getWidth() - r), 0);
-            float y = Math.max(Math.min(event.getY(), game.getHeight() - r), 0);
+            float x = Math.max(Math.min(event.getX(), game.getWidth() - r), r);
+            float y = Math.max(Math.min(event.getY(), game.getHeight() - r), r);
             player.setXY(x, y);
         }
     }

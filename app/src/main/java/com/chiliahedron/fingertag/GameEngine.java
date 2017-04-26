@@ -28,7 +28,7 @@ public class GameEngine implements Controller, Renderer {
     private List<Entity> enemies = new ArrayList<>();
     private FieldRenderer fieldRenderer;
     private EntityRenderer playerRenderer;
-    private List<EntityRenderer> enemyRenderers;
+    private List<EntityRenderer> enemyRenderers = new ArrayList<>();
     private HUD hud = new HUD(this);
     private PlayerController playerController;
     private List<EnemyController> enemyControllers = new ArrayList<>();
@@ -40,24 +40,23 @@ public class GameEngine implements Controller, Renderer {
     GameEngine(int width, int height) {
         this.width = width;
         this.height = height;
-        player = new Player(70, width/2, height/2);
-        for (int i=0; i<6; i++) {
-            Entity enemy = new Entity(70, 0, 0);
-            do {
-                int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
-                int y = random.nextInt(height - enemy.getRadius() * 2) + enemy.getRadius();
-                enemy.setXY(x, y);
-            } while(collidesWithEnemy(enemy) != null || player.overlaps(enemy));
-            enemies.add(enemy);
-            enemyControllers.add(new EnemyController(this, enemy));
-        }
         fieldRenderer = new FieldRenderer();
+        player = new Player(70, width/2, height/2);
         playerRenderer = new EntityRenderer(player, Color.GREEN, Paint.Style.FILL);
-        enemyRenderers = new ArrayList<>();
-        for (Entity enemy : enemies) {
-            enemyRenderers.add(new EntityRenderer(enemy, Color.RED, Paint.Style.STROKE));
-        }
         playerController = new PlayerController(this, player);
+        addEnemy();
+    }
+
+    private void addEnemy() {
+        Entity enemy = new Entity(70, 0, 0);
+        do {
+            int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
+            int y = random.nextInt(height - enemy.getRadius() * 2) + enemy.getRadius();
+            enemy.setXY(x, y);
+        } while(collidesWithEnemy(enemy) != null || player.overlaps(enemy));
+        enemies.add(enemy);
+        enemyControllers.add(new EnemyController(this, enemy));
+        enemyRenderers.add(new EntityRenderer(enemy, Color.RED, Paint.Style.STROKE));
     }
 
     @Nullable
@@ -73,14 +72,21 @@ public class GameEngine implements Controller, Renderer {
     public void update() {
         tick++;
         playerController.update();
+        for (EnemyController enemy : enemyControllers) {
+            enemy.update();
+        }
         if (collidesWithEnemy(player) != null) {
             score = 0;
+            enemies.clear();
+            enemyControllers.clear();
+            enemyRenderers.clear();
+            addEnemy();
         } else if (tick % 50 == 0) {
             score++;
             if (score > highScore) highScore = score;
         }
-        for (EnemyController enemy : enemyControllers) {
-            enemy.update();
+        if (score > enemies.size() * 5) {
+            addEnemy();
         }
     }
 
@@ -119,6 +125,8 @@ public class GameEngine implements Controller, Renderer {
     public int getHighScore() {
         return highScore;
     }
+
+    public void setHighScore(int score) { highScore = score; }
 
     public int getScore() {
         return score;
