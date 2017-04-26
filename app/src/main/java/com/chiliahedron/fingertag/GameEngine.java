@@ -47,7 +47,7 @@ public class GameEngine implements Controller, Renderer {
         addEnemy();
     }
 
-    private void addEnemy() {
+    void addEnemy() {
         Entity enemy = new Entity(70, 0, 0);
         do {
             int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
@@ -91,6 +91,7 @@ public class GameEngine implements Controller, Renderer {
     }
 
     public void render(Canvas canvas) {
+        if (canvas == null) return;
         fieldRenderer.render(canvas);
         for (EntityRenderer e : enemyRenderers) {
             e.render(canvas);
@@ -126,7 +127,8 @@ public class GameEngine implements Controller, Renderer {
         return highScore;
     }
 
-    public void setHighScore(int score) { highScore = score; }
+    void setScore(int score) { this.score = score; }
+    void setHighScore(int score) { highScore = score; }
 
     public int getScore() {
         return score;

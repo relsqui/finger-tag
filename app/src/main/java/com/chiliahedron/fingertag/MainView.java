@@ -28,7 +28,7 @@ public class MainView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 
-    @TargetApi(21)
+    @TargetApi(17)
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Point realSize = new Point();
@@ -75,5 +75,9 @@ public class MainView extends SurfaceView implements SurfaceHolder.Callback {
 
     public GameEngine getGame() {
         return game;
+    }
+
+    void stopThread() {
+        thread.setRunning(false);
     }
 }

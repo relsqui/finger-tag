@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TAG = MainActivity.class.getSimpleName();
     MainView mainView;
 
     @Override
@@ -19,25 +21,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+        mainView.stopThread();
         finish();
     }
 
-    /*
     @Override
-    public void onPause() {
-        super.onPause();
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        GameEngine game = mainView.getGame();
+        savedInstanceState.putInt("currentScore", game.getScore());
+        savedInstanceState.putInt("highScore", game.getHighScore());
         SharedPreferences.Editor spEditor = getPreferences(MODE_PRIVATE).edit();
-        spEditor.putInt("Finger Tag high score", mainView.getGame().getHighScore());
-        spEditor.commit();
-        finish();
+        spEditor.putInt("com.chiliahedron.fingertag", game.getHighScore());
+        spEditor.apply();
+        super.onSaveInstanceState(savedInstanceState);
+        Log.d(TAG, "Saving instance state. " + savedInstanceState);
     }
-
 
     @Override
-    public void onResume() {
-        super.onResume();
-        SharedPreferences sharedPrefs = getPreferences(MODE_PRIVATE);
-        mainView.getGame().setHighScore(sharedPrefs.getInt("Finger Tag high score", 0));
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        GameEngine game = mainView.getGame();
+        if (savedInstanceState == null) {
+            SharedPreferences sharedPrefs = getPreferences(MODE_PRIVATE);
+            game.setHighScore(sharedPrefs.getInt("com.chiliahedron.fingertag", 0));
+            Log.d(TAG, "Restoring state from preferences, if there is any.");
+        } else {
+            game.setHighScore(savedInstanceState.getInt("highScore", 0));
+            int currentScore = savedInstanceState.getInt("currentScore", 0);
+            game.setScore(currentScore);
+            for (int i=0; i < currentScore/5+1; i++) {
+                game.addEnemy();
+            }
+            Log.d(TAG, "Restoring state from bundle.");
+        }
     }
-    */
 }
