@@ -15,11 +15,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mainView = new MainView(this);
         setContentView(mainView);
-        Log.d(TAG, "Restoring state from preferences, if there is any.");
         GameEngine game = mainView.getGame();
         SharedPreferences sharedPrefs = getPreferences(MODE_PRIVATE);
-        game.setHighScore(sharedPrefs.getInt("com.chiliahedron.fingertag", 0));
-        Log.d(TAG, "Creating a new activity.");
+        game.setHighScore(sharedPrefs.getInt("com.chiliahedron.fingertag.HIGH_SCORE", 0));
+        game.setScore(sharedPrefs.getInt("com.chiliahedron.fingertag.CURRENT_SCORE", 0));
+        Log.d(TAG, "Restoring state from preferences, if there is any.");
     }
 
     @Override
@@ -33,12 +33,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         GameEngine game = mainView.getGame();
-        savedInstanceState.putInt("currentScore", game.getScore());
-        savedInstanceState.putInt("highScore", game.getHighScore());
+        savedInstanceState.putInt("highScore", game.getScore());
+        savedInstanceState.putInt("currentScore", game.getHighScore());
         SharedPreferences.Editor spEditor = getPreferences(MODE_PRIVATE).edit();
-        spEditor.putInt("com.chiliahedron.fingertag", game.getHighScore());
+        spEditor.putInt("com.chiliahedron.fingertag.HIGH_SCORE", game.getHighScore());
+        spEditor.putInt("com.chiliahedron.fingertag.CURRENT_SCORE", game.getScore());
         spEditor.apply();
-        Log.d(TAG, "Saving instance state. " + savedInstanceState);
+        Log.d(TAG, "Saving instance state.");
     }
 
     @Override
