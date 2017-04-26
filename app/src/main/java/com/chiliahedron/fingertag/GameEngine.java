@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 
 import com.chiliahedron.fingertag.controllers.Controller;
+import com.chiliahedron.fingertag.controllers.EnemyController;
 import com.chiliahedron.fingertag.controllers.PlayerController;
 import com.chiliahedron.fingertag.models.Entity;
 import com.chiliahedron.fingertag.models.Player;
@@ -30,6 +31,7 @@ public class GameEngine implements Controller, Renderer {
     private List<EntityRenderer> enemyRenderers;
     private HUD hud = new HUD(this);
     private PlayerController playerController;
+    private List<EnemyController> enemyControllers = new ArrayList<>();
     private int highScore = 0;
     private int score = 0;
     private long tick = 0;
@@ -39,7 +41,7 @@ public class GameEngine implements Controller, Renderer {
         this.width = width;
         this.height = height;
         player = new Player(70, width/2, height/2);
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<6; i++) {
             Entity enemy = new Entity(70, 0, 0);
             do {
                 int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
@@ -47,6 +49,7 @@ public class GameEngine implements Controller, Renderer {
                 enemy.setXY(x, y);
             } while(collidesWithEnemy(enemy) != null || player.overlaps(enemy));
             enemies.add(enemy);
+            enemyControllers.add(new EnemyController(this, enemy));
         }
         fieldRenderer = new FieldRenderer();
         playerRenderer = new EntityRenderer(player, Color.GREEN, Paint.Style.FILL);
@@ -75,6 +78,9 @@ public class GameEngine implements Controller, Renderer {
         } else if (tick % 50 == 0) {
             score++;
             if (score > highScore) highScore = score;
+        }
+        for (EnemyController enemy : enemyControllers) {
+            enemy.update();
         }
     }
 
@@ -116,5 +122,17 @@ public class GameEngine implements Controller, Renderer {
 
     public int getScore() {
         return score;
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    public long getTick() {
+        return tick;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
