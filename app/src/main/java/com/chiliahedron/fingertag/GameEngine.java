@@ -12,31 +12,39 @@ import com.chiliahedron.fingertag.models.Entity;
 import com.chiliahedron.fingertag.models.Player;
 import com.chiliahedron.fingertag.views.EntityRenderer;
 import com.chiliahedron.fingertag.views.FieldRenderer;
+import com.chiliahedron.fingertag.views.HUD;
 import com.chiliahedron.fingertag.views.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-class GameEngine implements Controller, Renderer {
+public class GameEngine implements Controller, Renderer {
+    private static final Random random = new Random(System.currentTimeMillis());
+    private final int width;
+    private final int height;
     private Player player;
     private List<Entity> enemies = new ArrayList<>();
     private FieldRenderer fieldRenderer;
     private EntityRenderer playerRenderer;
     private List<EntityRenderer> enemyRenderers;
+    private HUD hud = new HUD(this);
     private PlayerController playerController;
-    private static Random random = new Random(System.currentTimeMillis());
+    private int score = 0;
+    private long tick = 0;
 
 
     GameEngine(int width, int height) {
-        player = new Player(80, width/2, height/2);
+        this.width = width;
+        this.height = height;
+        player = new Player(70, width/2, height/2);
         for (int i=0; i<3; i++) {
-            Entity enemy = new Entity(80, 0, 0);
+            Entity enemy = new Entity(70, 0, 0);
             do {
                 int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
                 int y = random.nextInt(height - enemy.getRadius() * 2) + enemy.getRadius();
                 enemy.setXY(x, y);
-            } while(collidesWith(enemy) != null);
+            } while(collidesWithEnemy(enemy) != null || player.overlaps(enemy));
             enemies.add(enemy);
         }
         fieldRenderer = new FieldRenderer();
@@ -45,14 +53,11 @@ class GameEngine implements Controller, Renderer {
         for (Entity enemy : enemies) {
             enemyRenderers.add(new EntityRenderer(enemy, Color.RED, Paint.Style.STROKE));
         }
-        playerController = new PlayerController(player);
+        playerController = new PlayerController(this, player);
     }
 
-    private @Nullable
-    Entity collidesWith(Entity e) {
-        if (e.overlaps(player)) {
-            return player;
-        }
+    @Nullable
+    public Entity collidesWithEnemy(Entity e) {
         for (Entity enemy : enemies) {
             if (e.overlaps(enemy)) {
                 return enemy;
@@ -62,7 +67,13 @@ class GameEngine implements Controller, Renderer {
     }
 
     public void update() {
+        tick++;
         playerController.update();
+        if (collidesWithEnemy(player) != null) {
+            score = 0;
+        } else if (tick % 50 == 0) {
+            score++;
+        }
     }
 
     public void render(Canvas canvas) {
@@ -71,6 +82,7 @@ class GameEngine implements Controller, Renderer {
             e.render(canvas);
         }
         playerRenderer.render(canvas);
+        hud.render(canvas);
     }
 
     boolean handleTouchEvent(MotionEvent event) {
@@ -86,5 +98,17 @@ class GameEngine implements Controller, Renderer {
                 break;
         }
         return true;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getScore() {
+        return score;
     }
 }
