@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import com.chiliahedron.fingertag.controllers.Controller;
 import com.chiliahedron.fingertag.controllers.EnemyController;
 import com.chiliahedron.fingertag.controllers.PlayerController;
+import com.chiliahedron.fingertag.models.Enemy;
 import com.chiliahedron.fingertag.models.Entity;
 import com.chiliahedron.fingertag.models.Player;
 import com.chiliahedron.fingertag.views.EntityRenderer;
@@ -25,7 +26,7 @@ public class GameEngine implements Controller, Renderer {
     private int width = 0;
     private int height = 0;
     private Player player;
-    private List<Entity> enemies = new ArrayList<>();
+    private List<Enemy> enemies = new ArrayList<>();
     private FieldRenderer fieldRenderer;
     private EntityRenderer playerRenderer;
     private List<EntityRenderer> enemyRenderers = new ArrayList<>();
@@ -52,7 +53,7 @@ public class GameEngine implements Controller, Renderer {
     }
 
     private void addEnemy() {
-        Entity enemy = new Entity(70, 0, 0);
+        Enemy enemy = new Enemy(70, 0, 0);
         do {
             int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
             int y = random.nextInt(height - enemy.getRadius() * 2) + enemy.getRadius();

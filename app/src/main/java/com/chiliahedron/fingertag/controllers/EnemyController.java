@@ -1,6 +1,7 @@
 package com.chiliahedron.fingertag.controllers;
 
 import com.chiliahedron.fingertag.GameEngine;
+import com.chiliahedron.fingertag.models.Enemy;
 import com.chiliahedron.fingertag.models.Entity;
 import com.chiliahedron.fingertag.models.Player;
 
@@ -10,14 +11,14 @@ public class EnemyController implements Controller {
     // TODO: Move velocity into the model.
     private static Random random;
     private GameEngine game;
-    private Entity enemy;
+    private Enemy enemy;
     private static final float maxSpeed = 15;       // Highest permitted abs(velocity), in px/tick
     private int focus;                              // How intensely we target the player
     private int wanderlust;                         // How often we change directions
     private float xVel;
     private float yVel;
 
-    public EnemyController(GameEngine game, Entity enemy) {
+    public EnemyController(GameEngine game, Enemy enemy) {
         this.game = game;
         this.enemy = enemy;
         random = game.getRandom();
