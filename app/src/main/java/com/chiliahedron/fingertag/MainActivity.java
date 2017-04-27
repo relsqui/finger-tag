@@ -23,6 +23,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        mainView.stopThread();
+        // No parallel onResume because SurfaceView.onCreate is doing that work instead.
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.d(TAG, "Saving state from activity.");
