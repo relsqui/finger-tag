@@ -2,9 +2,9 @@ package com.chiliahedron.fingertag.models;
 
 
 public class Entity {
-    private final int radius;
-    private float x;
-    private float y;
+    final int radius;
+    float x;
+    float y;
 
     public Entity(int radius, float x, float y) {
         this.radius = radius;

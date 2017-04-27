@@ -11,22 +11,26 @@ public class EnemyController implements Controller {
     private static Random random;
     private GameEngine game;
     private Entity enemy;
-    private float maxSpeed = 15;       // Highest permitted absolute value of a velocity in px/tick
-    private float focus = 10;          // How much should we focus on targeting the player
-    private int wanderlust = 50;      // How often do we change directions
-    private float xVel = 3;
-    private float yVel = 3;
+    private static final float maxSpeed = 15;       // Highest permitted abs(velocity), in px/tick
+    private int focus;                              // How intensely we target the player
+    private int wanderlust;                         // How often we change directions
+    private float xVel;
+    private float yVel;
 
     public EnemyController(GameEngine game, Entity enemy) {
         this.game = game;
         this.enemy = enemy;
         random = game.getRandom();
-        wanderlust += random.nextInt(50);
+        wanderlust = 25 + random.nextInt(50);
+        xVel = random.nextFloat() * 20 - 10;
+        yVel = random.nextFloat() * 20 - 10;
+        focus = 5 + random.nextInt(10);
     }
 
     public void update() {
         if (game.getTick() % wanderlust == 0) {
             adjustVelocity();
+            wanderlust = 25 + random.nextInt(50);
         }
         float x = enemy.getX();
         float y = enemy.getY();
@@ -37,14 +41,11 @@ public class EnemyController implements Controller {
         if (y + yVel < r || y + yVel > game.getHeight() - r) {
             yVel *= -1;
         }
-        float oldX = enemy.getX();
-        float oldY = enemy.getY();
         enemy.setXY(x + xVel, y + yVel);
         Entity colliding = game.collidesWithEnemy(enemy);
         if (colliding != null) {
-            enemy.setXY(oldX, oldY);
-            xVel *= -.9;
-            yVel *= -.9;
+            xVel *= -1;
+            yVel *= -1;
         }
     }
 
