@@ -1,5 +1,6 @@
 package com.chiliahedron.fingertag.controllers;
 
+import android.graphics.PointF;
 import android.view.MotionEvent;
 
 import com.chiliahedron.fingertag.GameEngine;
@@ -17,7 +18,7 @@ public class PlayerController implements Controller {
     public void update() {}
 
     public void handleActionDown(MotionEvent event) {
-        if (player.contains(event.getX(), event.getY())) {
+        if (player.contains(new PointF(event.getX(), event.getY()))) {
             player.touch();
         }
     }
@@ -27,7 +28,7 @@ public class PlayerController implements Controller {
             float r = player.getRadius();
             float x = Math.max(Math.min(event.getX(), game.getWidth() - r), r);
             float y = Math.max(Math.min(event.getY(), game.getHeight() - r), r);
-            player.setXY(x, y);
+            player.moveTo(x, y);
         }
     }
 

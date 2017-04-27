@@ -30,15 +30,14 @@ public class EnemyController implements Controller {
         if (game.getTick() % enemy.getInertia() == 0) {
             wander();
         }
-        float x = enemy.getX();
-        float y = enemy.getY();
-        float r = enemy.getRadius();
+        PointF posP = enemy.getXY();
         Velocity vel = enemy.getVel();
         PointF velP = vel.getXY();
-        if (x + velP.x < r || x + velP.x > game.getWidth() - r) {
+        float r = enemy.getRadius();
+        if (posP.x + velP.x < r || posP.x + velP.x > game.getWidth() - r) {
             vel.bounceX();
         }
-        if (y + velP.y < r || y + velP.y > game.getHeight() - r) {
+        if (posP.y + velP.y < r || posP.y + velP.y > game.getHeight() - r) {
             vel.bounceY();
         }
         enemy.step();

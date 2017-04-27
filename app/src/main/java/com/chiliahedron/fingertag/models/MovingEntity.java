@@ -10,7 +10,7 @@ public class MovingEntity extends Entity {
     }
 
     public void step() {
-        offsetXY(vel.getXY());
+        moveBy(vel.getXY());
     }
 
     public Velocity getVel() {

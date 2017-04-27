@@ -1,44 +1,44 @@
 package com.chiliahedron.fingertag.models;
 
-
 import android.graphics.PointF;
 
+import com.chiliahedron.fingertag.controllers.components.Position;
+
 public class Entity {
-    // TODO: Put position into a component.
     final int radius;
-    float x;
-    float y;
+    Position pos = new Position();
 
     Entity(int radius, float x, float y) {
         this.radius = radius;
-        this.x = x;
-        this.y = y;
+        pos.set(x, y);
     }
 
     public boolean overlaps(Entity e) {
-        return Math.sqrt(Math.pow(e.getX()-x, 2) + Math.pow(e.getY()-y, 2)) < e.getRadius()+radius;
+        return pos.distanceFrom(e.getXY()) < e.getRadius() + radius;
     }
 
-    public boolean contains(float x, float y) {
-        return Math.sqrt(Math.pow(x-this.x, 2) + Math.pow(y-this.y, 2)) < radius;
+    public boolean contains(PointF p) {
+        return pos.distanceFrom(p) < radius;
     }
 
-    public void setXY(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public PointF getXY() {
+        return pos.getXY();
     }
 
-    void offsetXY(PointF point) {
-        this.x += point.x;
-        this.y += point.y;
+    public void moveTo(float x, float y) {
+        pos.set(x, y);
+    }
+
+    void moveBy(PointF point) {
+        pos.offset(point);
     }
 
     public float getX() {
-        return x;
+        return pos.getXY().x;
     }
 
     public float getY() {
-        return y;
+        return pos.getXY().y;
     }
 
     public int getRadius() {

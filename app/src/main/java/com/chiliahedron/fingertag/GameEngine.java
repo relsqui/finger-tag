@@ -58,7 +58,7 @@ public class GameEngine implements Controller, Renderer {
         do {
             int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
             int y = random.nextInt(height - enemy.getRadius() * 2) + enemy.getRadius();
-            enemy.setXY(x, y);
+            enemy.moveTo(x, y);
         } while(player.overlaps(enemy, 200) || collidesWithEnemy(enemy) != null);
         enemies.add(enemy);
         enemyControllers.add(new EnemyController(this, enemy));
