@@ -1,12 +1,14 @@
 package com.chiliahedron.fingertag.models;
 
 
+import android.graphics.PointF;
+
 public class Entity {
     final int radius;
     float x;
     float y;
 
-    public Entity(int radius, float x, float y) {
+    Entity(int radius, float x, float y) {
         this.radius = radius;
         this.x = x;
         this.y = y;
@@ -25,9 +27,9 @@ public class Entity {
         this.y = y;
     }
 
-    public void addXY(float x, float y) {
-        this.x += x;
-        this.y += y;
+    void offsetXY(PointF point) {
+        this.x += point.x;
+        this.y += point.y;
     }
 
     public float getX() {
