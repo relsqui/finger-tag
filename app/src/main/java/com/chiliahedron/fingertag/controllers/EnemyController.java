@@ -1,7 +1,5 @@
 package com.chiliahedron.fingertag.controllers;
 
-import android.util.Log;
-
 import com.chiliahedron.fingertag.GameEngine;
 import com.chiliahedron.fingertag.models.Entity;
 import com.chiliahedron.fingertag.models.Player;
@@ -10,7 +8,6 @@ import java.util.Random;
 
 public class EnemyController implements Controller {
     // TODO: Move velocity into the model.
-    private static final String TAG = EnemyController.class.getSimpleName();
     private static Random random;
     private GameEngine game;
     private Entity enemy;
@@ -40,7 +37,15 @@ public class EnemyController implements Controller {
         if (y + yVel < r || y + yVel > game.getHeight() - r) {
             yVel *= -1;
         }
+        float oldX = enemy.getX();
+        float oldY = enemy.getY();
         enemy.setXY(x + xVel, y + yVel);
+        Entity colliding = game.collidesWithEnemy(enemy);
+        if (colliding != null) {
+            enemy.setXY(oldX, oldY);
+            xVel *= -.9;
+            yVel *= -.9;
+        }
     }
 
     private void adjustVelocity() {

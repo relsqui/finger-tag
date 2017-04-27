@@ -51,22 +51,22 @@ public class GameEngine implements Controller, Renderer {
         }
     }
 
-    void addEnemy() {
+    private void addEnemy() {
         Entity enemy = new Entity(70, 0, 0);
         do {
             int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
             int y = random.nextInt(height - enemy.getRadius() * 2) + enemy.getRadius();
             enemy.setXY(x, y);
-        } while(collidesWithEnemy(enemy) != null || player.overlaps(enemy));
+        } while(player.overlaps(enemy) || collidesWithEnemy(enemy) != null);
         enemies.add(enemy);
         enemyControllers.add(new EnemyController(this, enemy));
         enemyRenderers.add(new EntityRenderer(enemy, Color.RED, Paint.Style.STROKE));
     }
 
     @Nullable
-    private Entity collidesWithEnemy(Entity e) {
+     public Entity collidesWithEnemy(Entity e) {
         for (Entity enemy : enemies) {
-            if (e.overlaps(enemy)) {
+            if (e.overlaps(enemy) && e != enemy) {
                 return enemy;
             }
         }
@@ -95,7 +95,6 @@ public class GameEngine implements Controller, Renderer {
     }
 
     public void render(Canvas canvas) {
-        if (canvas == null) return;
         fieldRenderer.render(canvas);
         for (EntityRenderer e : enemyRenderers) {
             e.render(canvas);

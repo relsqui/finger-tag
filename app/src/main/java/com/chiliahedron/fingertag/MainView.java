@@ -17,40 +17,33 @@ public class MainView extends SurfaceView implements SurfaceHolder.Callback {
 
     public MainView(Context context) {
         super(context);
+        Log.d(TAG, "Created view.");
         getHolder().addCallback(this);
-        thread = new MainThread(getHolder());
         setFocusable(true);
+        thread = new MainThread(getHolder());
         game = new GameEngine();
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        if (!thread.isRunning()) {
-            thread.setGame(game);
-            thread.setRunning(true);
-            thread.start();
-        }
+        Log.d(TAG, "Surface changed, doing nothing.");
     }
 
     @TargetApi(17)
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        Log.d(TAG, "Surface created, setting up game and thread.");
         Point realSize = new Point();
         getDisplay().getRealSize(realSize);
         game.setUp(realSize.x, realSize.y);
+        thread.setGame(game);
+        thread.start();
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        boolean retry = true;
-        while (retry) {
-            try {
-                thread.join();
-                retry = false;
-            } catch (InterruptedException e) {
-                Log.d(TAG, "Interrupted while shutting thread down, ignoring.");
-            }
-        }
+        Log.d(TAG, "Surface destroyed, finishing thread.");
+        thread.finish();
     }
 
     @Override
@@ -76,9 +69,5 @@ public class MainView extends SurfaceView implements SurfaceHolder.Callback {
 
     public GameEngine getGame() {
         return game;
-    }
-
-    void stopThread() {
-        thread.setRunning(false);
     }
 }

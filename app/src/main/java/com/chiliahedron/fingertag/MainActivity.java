@@ -13,25 +13,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "Activity created. Restoring state from preferences, if there is any.");
         mainView = new MainView(this);
         setContentView(mainView);
         GameEngine game = mainView.getGame();
         SharedPreferences sharedPrefs = getPreferences(MODE_PRIVATE);
         game.setHighScore(sharedPrefs.getInt("com.chiliahedron.fingertag.HIGH_SCORE", 0));
         game.setScore(sharedPrefs.getInt("com.chiliahedron.fingertag.CURRENT_SCORE", 0));
-        Log.d(TAG, "Restoring state from preferences, if there is any.");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mainView.stopThread();
-        finish();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
+        Log.d(TAG, "Saving state from activity.");
         GameEngine game = mainView.getGame();
         savedInstanceState.putInt("highScore", game.getScore());
         savedInstanceState.putInt("currentScore", game.getHighScore());
@@ -39,16 +33,14 @@ public class MainActivity extends AppCompatActivity {
         spEditor.putInt("com.chiliahedron.fingertag.HIGH_SCORE", game.getHighScore());
         spEditor.putInt("com.chiliahedron.fingertag.CURRENT_SCORE", game.getScore());
         spEditor.apply();
-        Log.d(TAG, "Saving instance state.");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        GameEngine game = mainView.getGame();
         Log.d(TAG, "Restoring state from bundle.");
+        GameEngine game = mainView.getGame();
         game.setHighScore(savedInstanceState.getInt("highScore", 0));
-        int currentScore = savedInstanceState.getInt("currentScore", 0);
-        game.setScore(currentScore);
+        game.setScore(savedInstanceState.getInt("currentScore", 0));
     }
 }
