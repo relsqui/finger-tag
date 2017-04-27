@@ -21,7 +21,7 @@ public class EnemyController implements Controller {
         this.game = game;
         this.enemy = enemy;
         random = game.getRandom();
-        wanderlust = 25 + random.nextInt(50);
+        wanderlust = 50 + random.nextInt(25);
         xVel = random.nextFloat() * 20 - 10;
         yVel = random.nextFloat() * 20 - 10;
         focus = 5 + random.nextInt(10);
@@ -30,7 +30,6 @@ public class EnemyController implements Controller {
     public void update() {
         if (game.getTick() % wanderlust == 0) {
             adjustVelocity();
-            wanderlust = 25 + random.nextInt(50);
         }
         float x = enemy.getX();
         float y = enemy.getY();
@@ -41,11 +40,12 @@ public class EnemyController implements Controller {
         if (y + yVel < r || y + yVel > game.getHeight() - r) {
             yVel *= -1;
         }
-        enemy.setXY(x + xVel, y + yVel);
+        enemy.addXY(xVel, yVel);
         Entity colliding = game.collidesWithEnemy(enemy);
         if (colliding != null) {
             xVel *= -1;
             yVel *= -1;
+            enemy.addXY(xVel, yVel);
         }
     }
 

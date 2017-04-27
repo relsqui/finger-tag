@@ -25,6 +25,11 @@ public class Entity {
         this.y = y;
     }
 
+    public void addXY(float x, float y) {
+        this.x += x;
+        this.y += y;
+    }
+
     public float getX() {
         return x;
     }
