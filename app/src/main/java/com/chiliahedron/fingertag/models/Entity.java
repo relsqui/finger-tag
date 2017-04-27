@@ -4,6 +4,7 @@ package com.chiliahedron.fingertag.models;
 import android.graphics.PointF;
 
 public class Entity {
+    // TODO: Put position into a component.
     final int radius;
     float x;
     float y;

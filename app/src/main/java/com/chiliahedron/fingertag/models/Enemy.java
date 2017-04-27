@@ -1,23 +1,26 @@
 package com.chiliahedron.fingertag.models;
 
-import com.chiliahedron.fingertag.controllers.components.Velocity;
-
-public class Enemy extends Entity {
-    private Velocity vel = new Velocity();
+public class Enemy extends MovingEntity {
+    private int inertia = 0;    // How infrequently we change directions.
+    private int focus = 0;      // How intently we chase the player.
 
     public Enemy(int radius, float x, float y) {
         super(radius, x, y);
     }
 
-    public void step() {
-        offsetXY(vel.getXY());
+    public int getInertia() {
+        return inertia;
     }
 
-    public Velocity getVel() {
-        return vel;
+    public void setInertia(int inertia) {
+        this.inertia = inertia;
     }
 
-    public void setVel(float x, float y) {
-        vel.set(x, y);
+    public int getFocus() {
+        return focus;
+    }
+
+    public void setFocus(int focus) {
+        this.focus = focus;
     }
 }

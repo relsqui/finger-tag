@@ -32,4 +32,8 @@ public class Velocity {
         bounceX();
         bounceY();
     }
+
+    public float getMax() {
+        return maxSpeed;
+    }
 }

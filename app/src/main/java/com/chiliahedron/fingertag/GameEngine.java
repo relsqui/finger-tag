@@ -54,7 +54,7 @@ public class GameEngine implements Controller, Renderer {
 
     private void addEnemy() {
         Enemy enemy = new Enemy(70, 0, 0);
-        enemy.setVel(random.nextFloat() * 20 - 10, random.nextFloat() * 20 - 10);
+        enemy.getVel().set(random.nextFloat() * 20 - 10, random.nextFloat() * 20 - 10);
         do {
             int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
             int y = random.nextInt(height - enemy.getRadius() * 2) + enemy.getRadius();

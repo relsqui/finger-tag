@@ -11,24 +11,24 @@ import com.chiliahedron.fingertag.models.Player;
 import java.util.Random;
 
 public class EnemyController implements Controller {
-    // TODO: Move attributes into the model.
     private static Random random;
     private GameEngine game;
     private Enemy enemy;
-    private int focus;                              // How intensely we target the player
-    private int wanderlust;                         // How often we change directions
 
     public EnemyController(GameEngine game, Enemy enemy) {
         this.game = game;
         this.enemy = enemy;
         random = game.getRandom();
-        wanderlust = 50 + random.nextInt(25);
-        focus = 5 + random.nextInt(10);
+        enemy.setInertia(50 + random.nextInt(25));
+        enemy.setFocus(5 + random.nextInt(10));
+        Velocity vel = enemy.getVel();
+        float max = vel.getMax();
+        vel.set((random.nextFloat() * 2 * max) - max, (random.nextFloat() * 2 * max) - max);
     }
 
     public void update() {
-        if (game.getTick() % wanderlust == 0) {
-            adjustVelocity();
+        if (game.getTick() % enemy.getInertia() == 0) {
+            wander();
         }
         float x = enemy.getX();
         float y = enemy.getY();
@@ -49,10 +49,10 @@ public class EnemyController implements Controller {
         }
     }
 
-    private void adjustVelocity() {
+    private void wander() {
         Player player = game.getPlayer();
-        float dx = random.nextFloat() * focus * Math.signum(player.getX() - enemy.getX());
-        float dy = random.nextFloat() * focus * Math.signum(player.getY() - enemy.getY());
+        float dx = random.nextFloat() * enemy.getFocus() * Math.signum(player.getX() - enemy.getX());
+        float dy = random.nextFloat() * enemy.getFocus() * Math.signum(player.getY() - enemy.getY());
         enemy.getVel().offset(dx, dy);
     }
 }
