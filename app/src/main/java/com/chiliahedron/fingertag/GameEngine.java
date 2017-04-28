@@ -45,7 +45,6 @@ public class GameEngine implements Controller, Renderer {
         player = new Player(70, width/2, height/2);
         playerRenderer = new EntityRenderer(player, Color.GREEN, Paint.Style.FILL);
         playerController = new PlayerController(this, player);
-        addEnemy();
         for (int i=0; i<score; i+=5) {
             // This comes up if we're recreating a game after a pause.
             addEnemy();
