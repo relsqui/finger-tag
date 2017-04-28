@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
+import android.graphics.RectF;
 import android.hardware.SensorManager;
 import android.view.OrientationEventListener;
 
@@ -15,7 +15,10 @@ public class HUD extends OrientationEventListener implements Renderer {
     private static final int OUTLINE_THICKNESS = 10;
     private static final int MARGIN = 30;
     private final float LINE_HEIGHT;
+    private final RectF PORTRAIT;
+    private final RectF LANDSCAPE;
     private int rotation;
+    private RectF drawBox;
     private GameEngine game;
     private Paint scorePaint = new Paint();
     private Paint highScorePaint = new Paint();
@@ -25,6 +28,14 @@ public class HUD extends OrientationEventListener implements Renderer {
         super(context, SensorManager.SENSOR_DELAY_GAME);
         enable();
         this.game = game;
+        float w = game.getWidth();
+        float h = game.getHeight();
+        float d = (h-w)/2;
+        // For all we know these are actually the other way around.
+        // It doesn't actually matter, it's just "default" and "non-default" orientation.
+        PORTRAIT = new RectF(0, 0, w, h);
+        LANDSCAPE = new RectF(0 - d, d, w + d, h - d);
+        drawBox = PORTRAIT;
         scorePaint.setColor(Color.WHITE);
         scorePaint.setTextSize(TEXT_SIZE);
         highScorePaint.setColor(Color.YELLOW);
@@ -45,30 +56,12 @@ public class HUD extends OrientationEventListener implements Renderer {
         canvas.rotate(rotation, canvas.getWidth()/2, canvas.getHeight()/2);
         topLeftText(canvas, 0, String.valueOf(game.getHighScore()), highScorePaint);
         topLeftText(canvas, 1, String.valueOf(game.getScore()), scorePaint);
-        PointF nw = new PointF(100, 100);
-        PointF ne = new PointF(canvas.getWidth()-100, 100);
-        PointF sw = new PointF(100, canvas.getHeight()-100);
-        PointF se = new PointF(canvas.getWidth()-100, canvas.getHeight()-100);
-        float[] lines = {
-                nw.x, nw.y, ne.x, ne.y,
-                ne.x, ne.y, se.x, se.y,
-                se.x, se.y, sw.x, sw.y,
-                sw.x, sw.y, nw.x, nw.y
-        };
-        canvas.drawLines(lines, highScorePaint);
-        canvas.drawText("NW", nw.x, nw.y, scorePaint);
-        canvas.drawText("NE", ne.x, ne.y, scorePaint);
-        canvas.drawText("SW", sw.x, sw.y, scorePaint);
-        canvas.drawText("SE", se.x, se.y, scorePaint);
-        canvas.drawCircle(canvas.getWidth()/2, canvas.getHeight()/2, 10, highScorePaint);
-        canvas.drawText("500x900 rotated", 500, 900, highScorePaint);
         canvas.restore();
-        canvas.drawText("500x900 normal", 500, 900, highScorePaint);
     }
 
     private void topLeftText(Canvas canvas, int row, String s, Paint paint) {
-        canvas.drawText(s, MARGIN, (row + 1) * LINE_HEIGHT, outline);
-        canvas.drawText(s, MARGIN, (row + 1) * LINE_HEIGHT, paint);
+        canvas.drawText(s, fixX(MARGIN), fixY((row + 1) * LINE_HEIGHT), outline);
+        canvas.drawText(s, fixX(MARGIN), fixY((row + 1) * LINE_HEIGHT), paint);
     }
 
     public void onOrientationChanged(int orientation) {
@@ -76,15 +69,27 @@ public class HUD extends OrientationEventListener implements Renderer {
         if (orientation > 315 || orientation <=45) {
             // Right-side up.
             rotation = 0;
+            drawBox = PORTRAIT;
         } else if (orientation <= 135) {
             // Turned left, so rotate right.
             rotation = 270;
+            drawBox = LANDSCAPE;
         } else if (orientation <= 225) {
             // Upside down.
             rotation = 180;
+            drawBox = PORTRAIT;
         } else {
             // Turned right, so rotate left.
             rotation = 90;
+            drawBox = LANDSCAPE;
         }
+    }
+
+    private float fixX(float x) {
+        return x + drawBox.left;
+    }
+
+    private float fixY(float y) {
+        return y + drawBox.top;
     }
 }
