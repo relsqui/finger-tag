@@ -36,13 +36,10 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log.d(TAG, "Saving state from activity.");
+        Log.d(TAG, "Saving state from interrupted activity.");
         savedInstanceState.putInt("highScore", game.getScore());
         savedInstanceState.putInt("currentScore", game.getHighScore());
-        SharedPreferences.Editor spEditor = getPreferences(MODE_PRIVATE).edit();
-        spEditor.putInt("com.chiliahedron.fingertag.HIGH_SCORE", game.getHighScore());
-        spEditor.putInt("com.chiliahedron.fingertag.CURRENT_SCORE", game.getScore());
-        spEditor.apply();
+        saveState();
     }
 
     @Override
@@ -58,7 +55,16 @@ public class GameActivity extends AppCompatActivity {
         intent.putExtra("com.chiliahedron.fingertag.SCORE", game.getScore());
         // Can't do this until now because we need the score.
         game.clearState();
+        // Save state after so we get the high score and not the current score.
+        saveState();
         startActivity(intent);
         finish();
+    }
+
+    private void saveState() {
+        SharedPreferences.Editor spEditor = getPreferences(MODE_PRIVATE).edit();
+        spEditor.putInt("com.chiliahedron.fingertag.HIGH_SCORE", game.getHighScore());
+        spEditor.putInt("com.chiliahedron.fingertag.CURRENT_SCORE", game.getScore());
+        spEditor.apply();
     }
 }
