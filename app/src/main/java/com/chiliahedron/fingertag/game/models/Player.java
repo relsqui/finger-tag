@@ -9,7 +9,7 @@ public class Player extends Entity {
     }
 
     public boolean overlaps(Entity e, int buffer) {
-        return pos.distanceFrom(e.getXY()) < e.getRadius() + radius + buffer;
+        return pos.distanceTo(e.getXY()) < e.getRadius() + radius + buffer;
     }
 
     public boolean isTouched() {

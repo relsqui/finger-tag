@@ -21,21 +21,25 @@ import com.chiliahedron.fingertag.game.views.HUD;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
 
 public class GameEngine {
     private static final Random random = new Random(System.currentTimeMillis());
     private int width = 0;
     private int height = 0;
-    private Player player;
-    private List<Enemy> enemies = new ArrayList<>();
-    private FieldRenderer fieldRenderer;
-    private EntityRenderer playerRenderer;
-    private List<EntityRenderer> enemyRenderers = new ArrayList<>();
     private HUD hud;
-    private PlayerController playerController;
+    private FieldRenderer fieldRenderer;
+    private static final int DEFAULT_SIZE = 60;
+    private List<Player> players = new ArrayList<>();
+    private List<EntityRenderer> playerRenderers = new ArrayList<>();
+    private List<PlayerController> playerControllers = new ArrayList<>();
+    private int[] playerColors = {Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.CYAN, Color.WHITE, Color.BLUE};
+    private List<Enemy> enemies = new ArrayList<>();
+    private List<EntityRenderer> enemyRenderers = new ArrayList<>();
     private List<EnemyController> enemyControllers = new ArrayList<>();
     private int highScore = 0;
+    // TODO: Make score an array!
     private int score = 0;
     private long tick = 0;
 
@@ -47,26 +51,31 @@ public class GameEngine {
         this.height = realSize.y;
         hud = new HUD(this, context);
         fieldRenderer = new FieldRenderer();
-        player = new Player(70, width/2, height/2);
-        playerRenderer = new EntityRenderer(player, Color.GREEN, Paint.Style.FILL);
-        playerController = new PlayerController(this, player);
         for (int i=0; i<score; i+=5) {
             // This comes up if we're recreating a game after a pause.
             addEnemy();
         }
+        // TODO: restore players!
     }
 
     private void addEnemy() {
-        Enemy enemy = new Enemy(70, 0, 0);
+        Enemy enemy = new Enemy(DEFAULT_SIZE, 0, 0);
         enemy.getVel().set(random.nextFloat() * 20 - 10, random.nextFloat() * 20 - 10);
         do {
             int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
             int y = random.nextInt(height - enemy.getRadius() * 2) + enemy.getRadius();
             enemy.moveTo(x, y);
-        } while(player.overlaps(enemy, 6 * player.getRadius()) || collidesWithEnemy(enemy) != null);
+        } while(collidesWithPlayer(enemy, 6 * DEFAULT_SIZE) != null || collidesWithEnemy(enemy) != null);
         enemies.add(enemy);
         enemyControllers.add(new EnemyController(this, enemy));
         enemyRenderers.add(new EntityRenderer(enemy, Color.RED, Paint.Style.STROKE));
+    }
+
+    private void addPlayer(float x, float y) {
+        Player player = new Player(DEFAULT_SIZE, x, y);
+        playerRenderers.add(new EntityRenderer(player, playerColors[players.size()], Paint.Style.FILL));
+        playerControllers.add(new PlayerController(this, player));
+        players.add(player);
     }
 
     @Nullable
@@ -79,15 +88,45 @@ public class GameEngine {
         return null;
     }
 
+    @Nullable
+    private Player collidesWithPlayer(Entity e, int buffer) {
+        for (Player player : players) {
+            if (player.overlaps(e, buffer) && e != player) {
+                return player;
+            }
+        }
+        return null;
+    }
+
     boolean update() {
+        // Return value is whether the game is over.
+        if (players.size() == 0) return false;
         tick++;
-        playerController.update();
         for (EnemyController enemy : enemyControllers) {
             enemy.update();
         }
-        if (collidesWithEnemy(player) != null) {
+        // TODO: Move the model/renderer into the controller, this is ridiculous.
+        ListIterator<Player> playerIterator = players.listIterator();
+        ListIterator<PlayerController> controllerIterator = playerControllers.listIterator();
+        ListIterator<EntityRenderer> rendererIterator = playerRenderers.listIterator();
+        // Using an iterator here instead of a for loop so we can modify the arrays on the fly.
+        while (playerIterator.hasNext()) {
+            Player player = playerIterator.next();
+            PlayerController controller = controllerIterator.next();
+            // We don't actually need to store the renderer, just advance the iterator.
+            rendererIterator.next();
+            controller.update();
+            if (collidesWithEnemy(player) != null) {
+                playerIterator.remove();
+                controllerIterator.remove();
+                rendererIterator.remove();
+            }
+        }
+        if (players.size() == 0) {
             return true;
-        } else if (tick % 50 == 0) {
+        }
+        if (tick % 50 == 0) {
+            // TODO: increment each score, when they're an array!
             score++;
             if (score > highScore) highScore = score;
         }
@@ -102,20 +141,31 @@ public class GameEngine {
         for (EntityRenderer e : enemyRenderers) {
             e.render(canvas);
         }
-        playerRenderer.render(canvas);
+        for (EntityRenderer p : playerRenderers) {
+            p.render(canvas);
+        }
         hud.render(canvas);
     }
 
     boolean handleTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                playerController.handleActionDown(event);
+                if (players.size() == 0) {
+                    addPlayer(event.getX(), event.getY());
+                }
+                for (PlayerController playerController : playerControllers) {
+                    playerController.handleActionDown(event);
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
-                playerController.handleActionMove(event);
+                for (PlayerController playerController : playerControllers) {
+                    playerController.handleActionMove(event);
+                }
                 break;
             case MotionEvent.ACTION_UP:
-                playerController.handleActionUp(event);
+                for (PlayerController playerController : playerControllers) {
+                    playerController.handleActionUp(event);
+                }
                 break;
         }
         return true;
@@ -126,6 +176,22 @@ public class GameEngine {
         enemies.clear();
         enemyControllers.clear();
         enemyRenderers.clear();
+    }
+
+    @Nullable
+    public Player nearestPlayer(Entity e) {
+        // Initialize minimum distance to the greatest possible distance between entities,
+        // so any actual distance we find will be shorter.
+        double minDistance = Math.max(width, height);
+        Player nearest = null;
+        for (Player player : players) {
+            double distance = e.distanceTo(player);
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearest = player;
+            }
+        }
+        return nearest;
     }
 
     public int getHeight() {
@@ -153,9 +219,5 @@ public class GameEngine {
 
     public long getTick() {
         return tick;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 }

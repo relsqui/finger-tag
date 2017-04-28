@@ -2,7 +2,7 @@ package com.chiliahedron.fingertag.game.models;
 
 import android.graphics.PointF;
 
-import com.chiliahedron.fingertag.game.controllers.components.Position;
+import com.chiliahedron.fingertag.game.models.components.Position;
 
 public class Entity {
     final int radius;
@@ -14,12 +14,14 @@ public class Entity {
     }
 
     public boolean overlaps(Entity e) {
-        return pos.distanceFrom(e.getXY()) < e.getRadius() + radius;
+        return pos.distanceTo(e.getXY()) < e.getRadius() + radius;
     }
 
     public boolean contains(PointF p) {
-        return pos.distanceFrom(p) < radius;
+        return pos.distanceTo(p) < radius;
     }
+
+    public double distanceTo(Entity e) { return pos.distanceTo(e.getXY()); }
 
     public PointF getXY() {
         return pos.getXY();

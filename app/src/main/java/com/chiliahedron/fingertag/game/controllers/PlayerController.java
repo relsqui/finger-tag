@@ -24,7 +24,7 @@ public class PlayerController implements Controller {
     }
 
     public void handleActionMove(MotionEvent event) {
-        if (player.isTouched()) {
+        if (player.isTouched() && player.contains(new PointF(event.getX(), event.getY()))) {
             float r = player.getRadius();
             float x = Math.max(Math.min(event.getX(), game.getWidth() - r), r);
             float y = Math.max(Math.min(event.getY(), game.getHeight() - r), r);
@@ -33,7 +33,7 @@ public class PlayerController implements Controller {
     }
 
     public void handleActionUp(MotionEvent event) {
-        if (player.isTouched()) {
+        if (player.isTouched() && player.contains(new PointF(event.getX(), event.getY()))) {
             player.drop();
         }
     }

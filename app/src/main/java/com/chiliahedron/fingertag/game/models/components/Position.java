@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag.game.controllers.components;
+package com.chiliahedron.fingertag.game.models.components;
 
 import android.graphics.PointF;
 
@@ -20,7 +20,7 @@ public class Position {
         y += p.y;
     }
 
-    public double distanceFrom(PointF p) {
+    public double distanceTo(PointF p) {
         return Math.sqrt(Math.pow(p.x-x, 2) + Math.pow(p.y-y, 2));
     }
 }

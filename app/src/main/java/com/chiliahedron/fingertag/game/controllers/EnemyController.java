@@ -3,7 +3,7 @@ package com.chiliahedron.fingertag.game.controllers;
 import android.graphics.PointF;
 
 import com.chiliahedron.fingertag.game.GameEngine;
-import com.chiliahedron.fingertag.game.controllers.components.Velocity;
+import com.chiliahedron.fingertag.game.models.components.Velocity;
 import com.chiliahedron.fingertag.game.models.Enemy;
 import com.chiliahedron.fingertag.game.models.Entity;
 import com.chiliahedron.fingertag.game.models.Player;
@@ -49,7 +49,8 @@ public class EnemyController implements Controller {
     }
 
     private void wander() {
-        Player player = game.getPlayer();
+        Player player = game.nearestPlayer(enemy);
+        if (player == null) return;
         float dx = random.nextFloat() * enemy.getFocus() * Math.signum(player.getX() - enemy.getX());
         float dy = random.nextFloat() * enemy.getFocus() * Math.signum(player.getY() - enemy.getY());
         enemy.getVel().offset(dx, dy);
