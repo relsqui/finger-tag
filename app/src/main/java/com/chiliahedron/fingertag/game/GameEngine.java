@@ -63,7 +63,7 @@ public class GameEngine {
             int x = random.nextInt(width - enemy.getRadius() * 2) + enemy.getRadius();
             int y = random.nextInt(height - enemy.getRadius() * 2) + enemy.getRadius();
             enemy.moveTo(x, y);
-        } while(player.overlaps(enemy, 200) || collidesWithEnemy(enemy) != null);
+        } while(player.overlaps(enemy, 6 * player.getRadius()) || collidesWithEnemy(enemy) != null);
         enemies.add(enemy);
         enemyControllers.add(new EnemyController(this, enemy));
         enemyRenderers.add(new EntityRenderer(enemy, Color.RED, Paint.Style.STROKE));
