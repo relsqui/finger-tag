@@ -1,6 +1,7 @@
 package com.chiliahedron.fingertag.game.controllers;
 
 import android.graphics.PointF;
+import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 
 import com.chiliahedron.fingertag.game.GameEngine;
@@ -19,12 +20,13 @@ public class PlayerController implements Controller {
 
     public void handleActionDown(MotionEvent event) {
         if (player.contains(new PointF(event.getX(), event.getY()))) {
-            player.touch();
+            player.touchWith(event.getPointerId(MotionEventCompat.getActionIndex(event)));
         }
     }
 
     public void handleActionMove(MotionEvent event) {
-        if (player.isTouched() && player.contains(new PointF(event.getX(), event.getY()))) {
+        int pointerId = event.getPointerId(MotionEventCompat.getActionIndex(event));
+        if (player.touchedBy() == pointerId) {
             float r = player.getRadius();
             float x = Math.max(Math.min(event.getX(), game.getWidth() - r), r);
             float y = Math.max(Math.min(event.getY(), game.getHeight() - r), r);
@@ -33,7 +35,8 @@ public class PlayerController implements Controller {
     }
 
     public void handleActionUp(MotionEvent event) {
-        if (player.isTouched() && player.contains(new PointF(event.getX(), event.getY()))) {
+        int pointerId = event.getPointerId(MotionEventCompat.getActionIndex(event));
+        if (player.touchedBy() == pointerId) {
             player.drop();
         }
     }

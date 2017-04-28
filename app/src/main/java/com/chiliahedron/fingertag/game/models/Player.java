@@ -1,26 +1,25 @@
 package com.chiliahedron.fingertag.game.models;
 
 public class Player extends Entity {
-    private boolean touch;
+    private int touch = -1;
 
     public Player(int radius, float x, float y) {
         super(radius, x, y);
-        touch = false;
     }
 
     public boolean overlaps(Entity e, int buffer) {
         return pos.distanceTo(e.getXY()) < e.getRadius() + radius + buffer;
     }
 
-    public boolean isTouched() {
+    public int touchedBy() {
         return touch;
     }
 
-    public void touch() {
-        touch = true;
+    public void touchWith(int pointerId) {
+        touch = pointerId;
     }
 
     public void drop() {
-        touch = false;
+        touch = -1;
     }
 }

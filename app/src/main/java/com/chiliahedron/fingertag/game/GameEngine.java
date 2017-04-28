@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MotionEventCompat;
 import android.view.Display;
 import android.view.MotionEvent;
 
@@ -148,11 +149,14 @@ public class GameEngine {
     }
 
     boolean handleTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
+        switch (MotionEventCompat.getActionMasked(event)) {
             case MotionEvent.ACTION_DOWN:
+                // This is either the actual first touchWith of the game ...
                 if (players.size() == 0) {
                     addPlayer(event.getX(), event.getY());
                 }
+                // ... or the first after a complete release.
+                // We can't tell which, so we have to give each player a chance to handle it.
                 for (PlayerController playerController : playerControllers) {
                     playerController.handleActionDown(event);
                 }
