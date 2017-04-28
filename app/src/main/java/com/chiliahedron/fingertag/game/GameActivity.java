@@ -59,5 +59,6 @@ public class GameActivity extends AppCompatActivity {
         // Can't do this until now because we need the score.
         game.clearState();
         startActivity(intent);
+        finish();
     }
 }

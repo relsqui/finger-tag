@@ -21,5 +21,6 @@ public class Interstitial extends AppCompatActivity {
 
     public void playAgain(View view) {
         startActivity(new Intent(this, GameActivity.class));
+        finish();
     }
 }
