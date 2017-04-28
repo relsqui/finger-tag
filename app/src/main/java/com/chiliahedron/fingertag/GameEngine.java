@@ -1,9 +1,13 @@
 package com.chiliahedron.fingertag;
 
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.support.annotation.Nullable;
+import android.view.Display;
 import android.view.MotionEvent;
 
 import com.chiliahedron.fingertag.controllers.Controller;
@@ -30,17 +34,20 @@ public class GameEngine implements Controller, Renderer {
     private FieldRenderer fieldRenderer;
     private EntityRenderer playerRenderer;
     private List<EntityRenderer> enemyRenderers = new ArrayList<>();
-    private HUD hud = new HUD(this);
+    private HUD hud;
     private PlayerController playerController;
     private List<EnemyController> enemyControllers = new ArrayList<>();
     private int highScore = 0;
     private int score = 0;
     private long tick = 0;
 
-
-    public void setUp(int width, int height) {
-        this.width = width;
-        this.height = height;
+    @TargetApi(17)
+    public void setUp(Context context, Display display) {
+        Point realSize = new Point();
+        display.getRealSize(realSize);
+        this.width = realSize.x;
+        this.height = realSize.y;
+        hud = new HUD(this, context);
         fieldRenderer = new FieldRenderer();
         player = new Player(70, width/2, height/2);
         playerRenderer = new EntityRenderer(player, Color.GREEN, Paint.Style.FILL);

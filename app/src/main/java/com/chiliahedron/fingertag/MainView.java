@@ -3,7 +3,6 @@ package com.chiliahedron.fingertag;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -34,9 +33,7 @@ public class MainView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d(TAG, "Surface created, setting up game and thread.");
         if (!setupDone) {
-            Point realSize = new Point();
-            getDisplay().getRealSize(realSize);
-            game.setUp(realSize.x, realSize.y);
+            game.setUp(getContext(), getDisplay());
             setupDone = true;
         }
         thread = new MainThread(getHolder());
