@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag;
+package com.chiliahedron.fingertag.game;
 
 import android.graphics.Canvas;
 import android.util.Log;
@@ -9,12 +9,14 @@ class GameThread extends Thread {
     private static final int MAX_FPS = 50;
     private final long framePeriod;
     private final SurfaceHolder sh;
+    private GameActivity gameActivity;
     private GameEngine game;
     private boolean finished = false;
 
-    GameThread(SurfaceHolder sh) {
+    GameThread(SurfaceHolder sh, GameActivity gameActivity) {
         super();
         this.sh = sh;
+        this.gameActivity = gameActivity;
         framePeriod = 1000000000L / MAX_FPS;
         Log.d(TAG, "Initializing thread.");
     }
@@ -32,7 +34,7 @@ class GameThread extends Thread {
             try {
                 canvas = sh.lockCanvas();
                 synchronized (sh) {
-                    game.update();
+                    finished = game.update();
                     game.render(canvas);
                 }
             } finally {
@@ -49,6 +51,7 @@ class GameThread extends Thread {
                 }
             }
         }
+        gameActivity.onGameFinished();
     }
 
     void finish() {

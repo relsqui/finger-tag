@@ -1,10 +1,10 @@
-package com.chiliahedron.fingertag.controllers;
+package com.chiliahedron.fingertag.game.controllers;
 
 import android.graphics.PointF;
 import android.view.MotionEvent;
 
-import com.chiliahedron.fingertag.GameEngine;
-import com.chiliahedron.fingertag.models.Player;
+import com.chiliahedron.fingertag.game.GameEngine;
+import com.chiliahedron.fingertag.game.models.Player;
 
 public class PlayerController implements Controller {
     private GameEngine game;

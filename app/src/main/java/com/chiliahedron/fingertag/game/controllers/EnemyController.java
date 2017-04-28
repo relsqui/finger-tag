@@ -1,12 +1,12 @@
-package com.chiliahedron.fingertag.controllers;
+package com.chiliahedron.fingertag.game.controllers;
 
 import android.graphics.PointF;
 
-import com.chiliahedron.fingertag.GameEngine;
-import com.chiliahedron.fingertag.controllers.components.Velocity;
-import com.chiliahedron.fingertag.models.Enemy;
-import com.chiliahedron.fingertag.models.Entity;
-import com.chiliahedron.fingertag.models.Player;
+import com.chiliahedron.fingertag.game.GameEngine;
+import com.chiliahedron.fingertag.game.controllers.components.Velocity;
+import com.chiliahedron.fingertag.game.models.Enemy;
+import com.chiliahedron.fingertag.game.models.Entity;
+import com.chiliahedron.fingertag.game.models.Player;
 
 import java.util.Random;
 

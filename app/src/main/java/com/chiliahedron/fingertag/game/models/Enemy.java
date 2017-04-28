@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag.models;
+package com.chiliahedron.fingertag.game.models;
 
 public class Enemy extends MovingEntity {
     private int inertia = 0;    // How infrequently we change directions.

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Finger Tag</string>
+    <string name="your_score">Your Score</string>
+    <string name="play_again">Play Again</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag;
+package com.chiliahedron.fingertag.game;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -37,7 +37,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             game.setUp(getContext(), getDisplay());
             setupDone = true;
         }
-        thread = new GameThread(getHolder());
+        thread = new GameThread(getHolder(), (GameActivity) getContext());
         thread.setGame(game);
         thread.start();
     }

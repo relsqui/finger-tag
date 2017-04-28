@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag;
+package com.chiliahedron.fingertag.game;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -10,22 +10,20 @@ import android.support.annotation.Nullable;
 import android.view.Display;
 import android.view.MotionEvent;
 
-import com.chiliahedron.fingertag.controllers.Controller;
-import com.chiliahedron.fingertag.controllers.EnemyController;
-import com.chiliahedron.fingertag.controllers.PlayerController;
-import com.chiliahedron.fingertag.models.Enemy;
-import com.chiliahedron.fingertag.models.Entity;
-import com.chiliahedron.fingertag.models.Player;
-import com.chiliahedron.fingertag.views.EntityRenderer;
-import com.chiliahedron.fingertag.views.FieldRenderer;
-import com.chiliahedron.fingertag.views.HUD;
-import com.chiliahedron.fingertag.views.Renderer;
+import com.chiliahedron.fingertag.game.controllers.EnemyController;
+import com.chiliahedron.fingertag.game.controllers.PlayerController;
+import com.chiliahedron.fingertag.game.models.Enemy;
+import com.chiliahedron.fingertag.game.models.Entity;
+import com.chiliahedron.fingertag.game.models.Player;
+import com.chiliahedron.fingertag.game.views.EntityRenderer;
+import com.chiliahedron.fingertag.game.views.FieldRenderer;
+import com.chiliahedron.fingertag.game.views.HUD;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GameEngine implements Controller, Renderer {
+public class GameEngine {
     private static final Random random = new Random(System.currentTimeMillis());
     private int width = 0;
     private int height = 0;
@@ -81,18 +79,14 @@ public class GameEngine implements Controller, Renderer {
         return null;
     }
 
-    public void update() {
+    boolean update() {
         tick++;
         playerController.update();
         for (EnemyController enemy : enemyControllers) {
             enemy.update();
         }
         if (collidesWithEnemy(player) != null) {
-            score = 0;
-            enemies.clear();
-            enemyControllers.clear();
-            enemyRenderers.clear();
-            addEnemy();
+            return true;
         } else if (tick % 50 == 0) {
             score++;
             if (score > highScore) highScore = score;
@@ -100,9 +94,10 @@ public class GameEngine implements Controller, Renderer {
         if (score > enemies.size() * 5) {
             addEnemy();
         }
+        return false;
     }
 
-    public void render(Canvas canvas) {
+    void render(Canvas canvas) {
         fieldRenderer.render(canvas);
         for (EntityRenderer e : enemyRenderers) {
             e.render(canvas);
@@ -124,6 +119,13 @@ public class GameEngine implements Controller, Renderer {
                 break;
         }
         return true;
+    }
+
+    void clearState() {
+        score = 0;
+        enemies.clear();
+        enemyControllers.clear();
+        enemyRenderers.clear();
     }
 
     public int getHeight() {

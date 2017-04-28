@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag.views;
+package com.chiliahedron.fingertag.game.views;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

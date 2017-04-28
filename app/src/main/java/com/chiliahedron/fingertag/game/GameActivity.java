@@ -1,9 +1,12 @@
-package com.chiliahedron.fingertag;
+package com.chiliahedron.fingertag.game;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.chiliahedron.fingertag.Interstitial;
 
 
 public class GameActivity extends AppCompatActivity {
@@ -48,5 +51,13 @@ public class GameActivity extends AppCompatActivity {
         Log.d(TAG, "Restoring state from bundle.");
         game.setHighScore(savedInstanceState.getInt("highScore", 0));
         game.setScore(savedInstanceState.getInt("currentScore", 0));
+    }
+
+    public void onGameFinished() {
+        Intent intent = new Intent(this, Interstitial.class);
+        intent.putExtra("com.chiliahedron.fingertag.SCORE", game.getScore());
+        // Can't do this until now because we need the score.
+        game.clearState();
+        startActivity(intent);
     }
 }

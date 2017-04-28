@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag.models;
+package com.chiliahedron.fingertag.game.models;
 
 public class Player extends Entity {
     private boolean touch;
