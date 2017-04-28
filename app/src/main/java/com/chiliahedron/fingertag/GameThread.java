@@ -4,15 +4,15 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-class MainThread extends Thread {
-    private static final String TAG = MainThread.class.getSimpleName();
+class GameThread extends Thread {
+    private static final String TAG = GameThread.class.getSimpleName();
     private static final int MAX_FPS = 50;
     private final long framePeriod;
     private final SurfaceHolder sh;
     private GameEngine game;
     private boolean finished = false;
 
-    MainThread(SurfaceHolder sh) {
+    GameThread(SurfaceHolder sh) {
         super();
         this.sh = sh;
         framePeriod = 1000000000L / MAX_FPS;

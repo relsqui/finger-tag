@@ -9,13 +9,13 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.view.View;
 
-public class MainView extends SurfaceView implements SurfaceHolder.Callback {
-    private static final String TAG = MainView.class.getSimpleName();
-    private MainThread thread;
+public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+    private static final String TAG = GameView.class.getSimpleName();
+    private GameThread thread;
     private GameEngine game;
     private boolean setupDone = false;
 
-    public MainView(Context context) {
+    public GameView(Context context) {
         super(context);
         Log.d(TAG, "Created view.");
         getHolder().addCallback(this);
@@ -36,7 +36,7 @@ public class MainView extends SurfaceView implements SurfaceHolder.Callback {
             game.setUp(getContext(), getDisplay());
             setupDone = true;
         }
-        thread = new MainThread(getHolder());
+        thread = new GameThread(getHolder());
         thread.setGame(game);
         thread.start();
     }

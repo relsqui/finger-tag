@@ -6,17 +6,17 @@ import android.os.Bundle;
 import android.util.Log;
 
 
-public class MainActivity extends AppCompatActivity {
-    public static final String TAG = MainActivity.class.getSimpleName();
-    MainView mainView;
+public class GameActivity extends AppCompatActivity {
+    public static final String TAG = GameActivity.class.getSimpleName();
+    GameView gameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "Activity created. Restoring state from preferences, if there is any.");
-        mainView = new MainView(this);
-        setContentView(mainView);
-        GameEngine game = mainView.getGame();
+        gameView = new GameView(this);
+        setContentView(gameView);
+        GameEngine game = gameView.getGame();
         SharedPreferences sharedPrefs = getPreferences(MODE_PRIVATE);
         game.setHighScore(sharedPrefs.getInt("com.chiliahedron.fingertag.HIGH_SCORE", 0));
         game.setScore(sharedPrefs.getInt("com.chiliahedron.fingertag.CURRENT_SCORE", 0));
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mainView.stopThread();
+        gameView.stopThread();
         // No parallel onResume because SurfaceView.onCreate is doing that work instead.
     }
 
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.d(TAG, "Saving state from activity.");
-        GameEngine game = mainView.getGame();
+        GameEngine game = gameView.getGame();
         savedInstanceState.putInt("highScore", game.getScore());
         savedInstanceState.putInt("currentScore", game.getHighScore());
         SharedPreferences.Editor spEditor = getPreferences(MODE_PRIVATE).edit();
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Log.d(TAG, "Restoring state from bundle.");
-        GameEngine game = mainView.getGame();
+        GameEngine game = gameView.getGame();
         game.setHighScore(savedInstanceState.getInt("highScore", 0));
         game.setScore(savedInstanceState.getInt("currentScore", 0));
     }
