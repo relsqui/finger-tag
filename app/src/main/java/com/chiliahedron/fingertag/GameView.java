@@ -20,13 +20,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         Log.d(TAG, "Created view.");
         getHolder().addCallback(this);
         setFocusable(true);
-        game = new GameEngine();
+    }
+
+    public void setGame(GameEngine game) {
+        this.game = game;
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d(TAG, "Surface changed, doing nothing.");
-    }
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 
     @TargetApi(17)
     @Override
@@ -66,10 +67,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
-    }
-
-    public GameEngine getGame() {
-        return game;
     }
 
     void stopThread() {

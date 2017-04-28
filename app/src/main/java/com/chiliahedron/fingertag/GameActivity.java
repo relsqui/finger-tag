@@ -8,18 +8,19 @@ import android.util.Log;
 
 public class GameActivity extends AppCompatActivity {
     public static final String TAG = GameActivity.class.getSimpleName();
+    GameEngine game = new GameEngine();
     GameView gameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "Activity created. Restoring state from preferences, if there is any.");
-        gameView = new GameView(this);
-        setContentView(gameView);
-        GameEngine game = gameView.getGame();
         SharedPreferences sharedPrefs = getPreferences(MODE_PRIVATE);
         game.setHighScore(sharedPrefs.getInt("com.chiliahedron.fingertag.HIGH_SCORE", 0));
         game.setScore(sharedPrefs.getInt("com.chiliahedron.fingertag.CURRENT_SCORE", 0));
+        gameView = new GameView(this);
+        gameView.setGame(game);
+        setContentView(gameView);
     }
 
     @Override
@@ -33,7 +34,6 @@ public class GameActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.d(TAG, "Saving state from activity.");
-        GameEngine game = gameView.getGame();
         savedInstanceState.putInt("highScore", game.getScore());
         savedInstanceState.putInt("currentScore", game.getHighScore());
         SharedPreferences.Editor spEditor = getPreferences(MODE_PRIVATE).edit();
@@ -46,7 +46,6 @@ public class GameActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Log.d(TAG, "Restoring state from bundle.");
-        GameEngine game = gameView.getGame();
         game.setHighScore(savedInstanceState.getInt("highScore", 0));
         game.setScore(savedInstanceState.getInt("currentScore", 0));
     }
