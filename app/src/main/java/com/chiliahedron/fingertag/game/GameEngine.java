@@ -13,7 +13,6 @@ import com.chiliahedron.fingertag.game.controllers.managers.EnemyManager;
 import com.chiliahedron.fingertag.game.controllers.managers.PlayerManager;
 import com.chiliahedron.fingertag.game.controllers.managers.PowerupManager;
 import com.chiliahedron.fingertag.game.models.Entity;
-import com.chiliahedron.fingertag.game.models.powerups.ExtraPoint;
 import com.chiliahedron.fingertag.game.renderers.FieldRenderer;
 import com.chiliahedron.fingertag.game.renderers.HUD;
 
@@ -26,9 +25,9 @@ public class GameEngine {
     private int height = 0;
     private HUD hud;
     private FieldRenderer fieldRenderer;
-    private PlayerManager players = new PlayerManager(this, DEFAULT_SIZE);
-    private EnemyManager enemies = new EnemyManager(this, DEFAULT_SIZE);
-    private PowerupManager powerups = new PowerupManager(this);
+    private PlayerManager players;
+    private EnemyManager enemies;
+    private PowerupManager powerups;
     private int highScore = 0;
     private int score = 0;
     private long tick = 0;
@@ -39,8 +38,12 @@ public class GameEngine {
         display.getRealSize(realSize);
         this.width = realSize.x;
         this.height = realSize.y;
+        // Initializing these down here because several of them need to know game dimensions.
         hud = new HUD(this, context);
         fieldRenderer = new FieldRenderer();
+        players = new PlayerManager(this, DEFAULT_SIZE);
+        enemies = new EnemyManager(this, DEFAULT_SIZE);
+        powerups = new PowerupManager(this);
         for (int i=0; i<score; i+=5) {
             // This comes up if we're recreating a game after a pause.
             enemies.add();
@@ -66,10 +69,10 @@ public class GameEngine {
                 highScore = score;
             }
         }
-        if (tick % 120 == 0) {
-            powerups.add(new ExtraPoint(width/2, height/2));
+        if (tick % 320 == 0) {
+            powerups.add();
         }
-        if (score > enemies.size() * 5) {
+        if (tick % 250 == 0) {
             enemies.add();
         }
         return false;
@@ -109,7 +112,8 @@ public class GameEngine {
     public boolean visible(Entity e) {
         PointF pos = e.getXY();
         int radius = e.getRadius();
-        return pos.x > radius && pos.y > radius && pos.x <= width-radius && pos.y < height-radius;
+        return pos.x > -1 * radius && pos.y > -1 * radius &&
+               pos.x <= width + radius && pos.y < height + radius;
     }
 
     public PlayerManager getPlayers() {

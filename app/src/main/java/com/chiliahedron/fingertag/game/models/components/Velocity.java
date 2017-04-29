@@ -5,7 +5,7 @@ import android.graphics.PointF;
 public class Velocity {
     private float x = 0;
     private float y = 0;
-    private float maxSpeed = 15;
+    private float maxSpeed = 10;
 
     public PointF getXY() {
         return new PointF(x, y);
@@ -17,7 +17,8 @@ public class Velocity {
     }
 
     public void offset(float dx, float dy) {
-        set(x + dx, y + dy);
+        this.x += dx;
+        this.y += dy;
     }
 
     public void bounceX() {

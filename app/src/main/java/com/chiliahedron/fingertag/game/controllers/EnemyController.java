@@ -5,7 +5,6 @@ import android.graphics.PointF;
 import com.chiliahedron.fingertag.game.GameEngine;
 import com.chiliahedron.fingertag.game.models.components.Velocity;
 import com.chiliahedron.fingertag.game.models.Enemy;
-import com.chiliahedron.fingertag.game.models.Entity;
 import com.chiliahedron.fingertag.game.models.Player;
 
 import java.util.Random;
