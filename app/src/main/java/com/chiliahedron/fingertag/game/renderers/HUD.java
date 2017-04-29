@@ -23,6 +23,7 @@ public class HUD extends OrientationEventListener implements Renderer {
     private Paint scorePaint = new Paint();
     private Paint highScorePaint = new Paint();
     private Paint outline = new Paint();
+    private Paint livesPaint = new Paint();
 
     public HUD(GameEngine game, Context context) {
         super(context, SensorManager.SENSOR_DELAY_GAME);
@@ -45,6 +46,9 @@ public class HUD extends OrientationEventListener implements Renderer {
         outline.setStyle(Paint.Style.STROKE);
         outline.setStrokeWidth(OUTLINE_THICKNESS);
         outline.setStrokeJoin(Paint.Join.ROUND);
+        livesPaint.setColor(Color.GRAY);
+        livesPaint.setStyle(Paint.Style.FILL);
+        livesPaint.setTextSize(TEXT_SIZE);
 
         // http://stackoverflow.com/a/42091739/252125
         Paint.FontMetrics fm = outline.getFontMetrics();
@@ -56,6 +60,7 @@ public class HUD extends OrientationEventListener implements Renderer {
         canvas.rotate(rotation, canvas.getWidth()/2, canvas.getHeight()/2);
         topLeftText(canvas, 0, String.valueOf(game.getHighScore()), highScorePaint);
         topLeftText(canvas, 1, String.valueOf(game.getScore()), scorePaint);
+        topLeftText(canvas, 2, String.valueOf(game.getLives()), livesPaint);
         canvas.restore();
     }
 

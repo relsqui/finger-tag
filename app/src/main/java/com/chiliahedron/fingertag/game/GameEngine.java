@@ -30,6 +30,7 @@ public class GameEngine {
     private PowerupManager powerups;
     private int highScore = 0;
     private int score = 0;
+    private int lives = 3;
     private long tick = 0;
 
     @TargetApi(17)
@@ -105,6 +106,7 @@ public class GameEngine {
 
     void clearState() {
         score = 0;
+        lives = 3;
         enemies.clear();
         powerups.clear();
     }
@@ -151,4 +153,8 @@ public class GameEngine {
     public long getTick() {
         return tick;
     }
+
+    public int getLives() { return lives; }
+
+    public void addLives(int lives) { this.lives += lives; }
 }

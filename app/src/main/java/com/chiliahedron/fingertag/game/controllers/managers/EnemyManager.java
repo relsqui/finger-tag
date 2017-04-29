@@ -1,8 +1,7 @@
 package com.chiliahedron.fingertag.game.controllers.managers;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.support.annotation.Nullable;
 
 import com.chiliahedron.fingertag.game.GameEngine;
 import com.chiliahedron.fingertag.game.controllers.Controller;
@@ -43,6 +42,29 @@ public class EnemyManager implements Controller, Renderer {
         enemyRenderers.add(new EntityRenderer(enemy));
     }
 
+    @Nullable
+    Enemy nearest(Entity e) {
+        // Initialize minimum distance to the greatest possible distance between entities,
+        // so any actual distance we find will be shorter.
+        double minDistance = Math.max(game.getWidth(), game.getHeight());
+        Enemy nearest = null;
+        for (Enemy enemy : enemies) {
+            double distance = e.distanceTo(enemy);
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearest = enemy;
+            }
+        }
+        return nearest;
+    }
+
+    void remove(Enemy enemy) {
+        int index = enemies.indexOf(enemy);
+        enemies.remove(index);
+        enemyControllers.remove(index);
+        enemyRenderers.remove(index);
+    }
+
     public boolean collideWith(Entity e) {
         for (Entity enemy : enemies) {
             if (e.overlaps(enemy) && e != enemy) {
@@ -68,9 +90,5 @@ public class EnemyManager implements Controller, Renderer {
         for (EntityRenderer e : enemyRenderers) {
             e.render(canvas);
         }
-    }
-
-    public int size() {
-        return enemies.size();
     }
 }

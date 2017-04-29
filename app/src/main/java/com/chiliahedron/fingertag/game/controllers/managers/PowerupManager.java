@@ -6,13 +6,13 @@ import android.graphics.PointF;
 import com.chiliahedron.fingertag.game.GameEngine;
 import com.chiliahedron.fingertag.game.controllers.Controller;
 import com.chiliahedron.fingertag.game.controllers.PowerupController;
+import com.chiliahedron.fingertag.game.models.powerups.ExtraLife;
 import com.chiliahedron.fingertag.game.models.powerups.ExtraPoint;
 import com.chiliahedron.fingertag.game.models.powerups.Powerup;
 import com.chiliahedron.fingertag.game.models.powerups.SpawnEnemy;
 import com.chiliahedron.fingertag.game.renderers.EntityRenderer;
 import com.chiliahedron.fingertag.game.renderers.Renderer;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -71,10 +71,13 @@ public class PowerupManager implements Controller, Renderer {
     public void add() {
         int startIndex = random.nextInt(8);
         Powerup powerup;
-        if (random.nextInt(3) == 0) {
+        int powerupChoice = random.nextInt(100);
+        if (powerupChoice < 10) {
             powerup = new ExtraPoint(startPos[startIndex].x, startPos[startIndex].y);
-        } else {
+        } else if (powerupChoice < 20) {
             powerup = new SpawnEnemy(startPos[startIndex].x, startPos[startIndex].y);
+        } else {
+            powerup = new ExtraLife(startPos[startIndex].x, startPos[startIndex].y);
         }
         powerup.getVel().set(startVel[startIndex].x, startVel[startIndex].y);
         controllers.add(new PowerupController(game, powerup));

@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import com.chiliahedron.fingertag.game.GameEngine;
 import com.chiliahedron.fingertag.game.controllers.Controller;
 import com.chiliahedron.fingertag.game.controllers.PlayerController;
+import com.chiliahedron.fingertag.game.models.Enemy;
 import com.chiliahedron.fingertag.game.models.Entity;
 import com.chiliahedron.fingertag.game.models.Player;
 import com.chiliahedron.fingertag.game.renderers.EntityRenderer;
@@ -63,12 +64,18 @@ public class PlayerManager implements Controller, Renderer {
             // We don't need to store the renderer, just keep the iterators in sync.
             rendererIterator.next();
             controller.update();
-            if (game.getEnemies().collideWith(player)) {
-                playerIterator.remove();
-                controllerIterator.remove();
-                rendererIterator.remove();
-                // Free up this player's color for another player.
-                colors.put(player.getColor(), true);
+            Enemy nearestEnemy = game.getEnemies().nearest(player);
+            if (nearestEnemy != null && nearestEnemy.overlaps(player)) {
+                if (game.getLives() > 0) {
+                    game.addLives(-1);
+                    game.getEnemies().remove(nearestEnemy);
+                } else {
+                    playerIterator.remove();
+                    controllerIterator.remove();
+                    rendererIterator.remove();
+                    // Free up this player's color for another player.
+                    colors.put(player.getColor(), true);
+                }
             }
         }
     }
