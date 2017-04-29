@@ -5,7 +5,7 @@ import android.graphics.PointF;
 public class Velocity {
     private float x = 0;
     private float y = 0;
-    private static final float maxSpeed = 15;
+    private float maxSpeed = 15;
 
     public PointF getXY() {
         return new PointF(x, y);
@@ -36,4 +36,6 @@ public class Velocity {
     public float getMax() {
         return maxSpeed;
     }
+
+    public void setMax(float maxSpeed) { this.maxSpeed = maxSpeed; }
 }

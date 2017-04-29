@@ -2,23 +2,24 @@ package com.chiliahedron.fingertag.game.controllers.managers;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.SparseBooleanArray;
 import android.view.MotionEvent;
 
 import com.chiliahedron.fingertag.game.GameEngine;
+import com.chiliahedron.fingertag.game.controllers.Controller;
 import com.chiliahedron.fingertag.game.controllers.PlayerController;
 import com.chiliahedron.fingertag.game.models.Entity;
 import com.chiliahedron.fingertag.game.models.Player;
-import com.chiliahedron.fingertag.game.views.EntityRenderer;
+import com.chiliahedron.fingertag.game.renderers.EntityRenderer;
+import com.chiliahedron.fingertag.game.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class PlayerManager {
+public class PlayerManager implements Controller, Renderer {
     private GameEngine game;
     private int defaultSize;
     private List<Player> players = new ArrayList<>();
@@ -45,7 +46,8 @@ public class PlayerManager {
         int color = colors.keyAt(availableIndex);
         colors.put(color, false);
         Player player = new Player(defaultSize, x, y);
-        playerRenderers.add(new EntityRenderer(player, color, Paint.Style.FILL));
+        player.setColor(color);
+        playerRenderers.add(new EntityRenderer(player));
         playerControllers.add(new PlayerController(game, player));
         players.add(player);
     }
@@ -58,14 +60,15 @@ public class PlayerManager {
         while (playerIterator.hasNext()) {
             Player player = playerIterator.next();
             PlayerController controller = controllerIterator.next();
-            EntityRenderer renderer = rendererIterator.next();
+            // We don't need to store the renderer, just keep the iterators in sync.
+            rendererIterator.next();
             controller.update();
             if (game.getEnemies().collideWith(player)) {
                 playerIterator.remove();
                 controllerIterator.remove();
                 rendererIterator.remove();
                 // Free up this player's color for another player.
-                colors.put(renderer.getColor(), true);
+                colors.put(player.getColor(), true);
             }
         }
     }

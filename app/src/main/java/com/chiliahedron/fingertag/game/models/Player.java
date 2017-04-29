@@ -1,5 +1,7 @@
 package com.chiliahedron.fingertag.game.models;
 
+import android.graphics.Paint;
+
 public class Player extends Entity {
     private int touch = -1;
 

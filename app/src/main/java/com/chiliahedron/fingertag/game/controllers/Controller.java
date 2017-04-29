@@ -1,5 +1,5 @@
 package com.chiliahedron.fingertag.game.controllers;
 
-interface Controller {
+public interface Controller {
     void update();
 }

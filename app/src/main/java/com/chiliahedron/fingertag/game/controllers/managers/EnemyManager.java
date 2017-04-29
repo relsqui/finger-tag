@@ -5,16 +5,18 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.chiliahedron.fingertag.game.GameEngine;
+import com.chiliahedron.fingertag.game.controllers.Controller;
 import com.chiliahedron.fingertag.game.controllers.EnemyController;
 import com.chiliahedron.fingertag.game.models.Enemy;
 import com.chiliahedron.fingertag.game.models.Entity;
-import com.chiliahedron.fingertag.game.views.EntityRenderer;
+import com.chiliahedron.fingertag.game.renderers.EntityRenderer;
+import com.chiliahedron.fingertag.game.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class EnemyManager {
+public class EnemyManager implements Controller, Renderer {
     private GameEngine game;
     private Random random;
     private int defaultSize;
@@ -38,7 +40,7 @@ public class EnemyManager {
         } while(game.getPlayers().collideWith(enemy, 6 * defaultSize) || collideWith(enemy));
         enemies.add(enemy);
         enemyControllers.add(new EnemyController(game, enemy));
-        enemyRenderers.add(new EntityRenderer(enemy, Color.RED, Paint.Style.STROKE));
+        enemyRenderers.add(new EntityRenderer(enemy));
     }
 
     public boolean collideWith(Entity e) {

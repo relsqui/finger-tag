@@ -1,11 +1,15 @@
 package com.chiliahedron.fingertag.game.models;
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
 
 import com.chiliahedron.fingertag.game.models.components.Position;
 
 public class Entity {
     final int radius;
+    protected int color = Color.TRANSPARENT;
+    Paint.Style style = Paint.Style.FILL;
     Position pos = new Position();
 
     Entity(int radius, float x, float y) {
@@ -46,4 +50,10 @@ public class Entity {
     public int getRadius() {
         return radius;
     }
+
+    public int getColor() { return color; }
+
+    public void setColor(int color) { this.color = color; }
+
+    public Paint.Style getStyle() { return style; }
 }

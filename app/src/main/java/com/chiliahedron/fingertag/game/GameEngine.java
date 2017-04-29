@@ -4,14 +4,18 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.support.v4.view.MotionEventCompat;
 import android.view.Display;
 import android.view.MotionEvent;
 
 import com.chiliahedron.fingertag.game.controllers.managers.EnemyManager;
 import com.chiliahedron.fingertag.game.controllers.managers.PlayerManager;
-import com.chiliahedron.fingertag.game.views.FieldRenderer;
-import com.chiliahedron.fingertag.game.views.HUD;
+import com.chiliahedron.fingertag.game.controllers.managers.PowerupManager;
+import com.chiliahedron.fingertag.game.models.Entity;
+import com.chiliahedron.fingertag.game.models.powerups.ExtraPoint;
+import com.chiliahedron.fingertag.game.renderers.FieldRenderer;
+import com.chiliahedron.fingertag.game.renderers.HUD;
 
 import java.util.Random;
 
@@ -24,6 +28,7 @@ public class GameEngine {
     private FieldRenderer fieldRenderer;
     private PlayerManager players = new PlayerManager(this, DEFAULT_SIZE);
     private EnemyManager enemies = new EnemyManager(this, DEFAULT_SIZE);
+    private PowerupManager powerups = new PowerupManager(this);
     private int highScore = 0;
     private int score = 0;
     private long tick = 0;
@@ -50,6 +55,7 @@ public class GameEngine {
         tick++;
         enemies.update();
         players.update();
+        powerups.update();
         if (players.size() == 0) {
             // We had some until we updated, so if there are none left they've lost.
             return true;
@@ -60,6 +66,9 @@ public class GameEngine {
                 highScore = score;
             }
         }
+        if (tick % 120 == 0) {
+            powerups.add(new ExtraPoint(width/2, height/2));
+        }
         if (score > enemies.size() * 5) {
             enemies.add();
         }
@@ -69,6 +78,7 @@ public class GameEngine {
     void render(Canvas canvas) {
         fieldRenderer.render(canvas);
         enemies.render(canvas);
+        powerups.render(canvas);
         players.render(canvas);
         hud.render(canvas);
     }
@@ -93,6 +103,13 @@ public class GameEngine {
     void clearState() {
         score = 0;
         enemies.clear();
+        powerups.clear();
+    }
+
+    public boolean visible(Entity e) {
+        PointF pos = e.getXY();
+        int radius = e.getRadius();
+        return pos.x > radius && pos.y > radius && pos.x <= width-radius && pos.y < height-radius;
     }
 
     public PlayerManager getPlayers() {
@@ -121,7 +138,7 @@ public class GameEngine {
         return score;
     }
 
-    void setScore(int score) { this.score = score; }
+    public void addScore(int score) { this.score += score; }
 
     public Random getRandom() {
         return random;

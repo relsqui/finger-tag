@@ -20,7 +20,7 @@ public class GameActivity extends AppCompatActivity {
         Log.d(TAG, "Activity created. Restoring state from preferences, if there is any.");
         SharedPreferences sharedPrefs = getSharedPreferences("com.chiliahedron.fingertag", MODE_PRIVATE);
         game.setHighScore(sharedPrefs.getInt("com.chiliahedron.fingertag.HIGH_SCORE", 0));
-        game.setScore(sharedPrefs.getInt("com.chiliahedron.fingertag.CURRENT_SCORE", 0));
+        game.addScore(sharedPrefs.getInt("com.chiliahedron.fingertag.CURRENT_SCORE", 0));
         gameView = new GameView(this);
         gameView.setGame(game);
         setContentView(gameView);
@@ -47,7 +47,7 @@ public class GameActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         Log.d(TAG, "Restoring state from bundle.");
         game.setHighScore(savedInstanceState.getInt("highScore", 0));
-        game.setScore(savedInstanceState.getInt("currentScore", 0));
+        game.addScore(savedInstanceState.getInt("currentScore", 0));
     }
 
     public void onGameFinished() {

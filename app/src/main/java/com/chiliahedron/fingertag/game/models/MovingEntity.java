@@ -3,9 +3,9 @@ package com.chiliahedron.fingertag.game.models;
 import com.chiliahedron.fingertag.game.models.components.Velocity;
 
 public class MovingEntity extends Entity {
-    private Velocity vel = new Velocity();
+    protected Velocity vel = new Velocity();
 
-    MovingEntity(int radius, float x, float y) {
+    public MovingEntity(int radius, float x, float y) {
         super(radius, x, y);
     }
 
