@@ -41,8 +41,7 @@ public class EnemyController implements Controller {
             vel.bounceY();
         }
         enemy.step();
-        Entity colliding = game.collidesWithEnemy(enemy);
-        if (colliding != null) {
+        if (game.collidesWithEnemy(enemy)) {
             vel.bounceXY();
             enemy.step();
         }
