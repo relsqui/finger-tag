@@ -44,16 +44,21 @@ public class GameEngine {
 
     boolean update() {
         // Returns true when the game has ended, false otherwise.
-        if (players.size() == 0) return false;
+        if (players.size() == 0) {
+            return false;
+        }
         tick++;
         enemies.update();
         players.update();
         if (players.size() == 0) {
+            // We had some until we updated, so if there are none left they've lost.
             return true;
         }
         if (tick % 50 == 0) {
             score++;
-            if (score > highScore) highScore = score;
+            if (score > highScore) {
+                highScore = score;
+            }
         }
         if (score > enemies.size() * 5) {
             enemies.add();
