@@ -58,9 +58,17 @@ public class GameEngine {
             return false;
         }
         if (tick < 150) {
+            if (tick < 50) {
+                fieldRenderer.setCountdown(3);
+            } else if (tick < 100) {
+                fieldRenderer.setCountdown(2);
+            } else {
+                fieldRenderer.setCountdown(1);
+            }
             tick++;
             return false;
         }
+        fieldRenderer.setCountdown(0);
         joinOK = false;
         enemies.update();
         players.update();
@@ -78,7 +86,8 @@ public class GameEngine {
         if (tick != 0 && tick % 320 == 0) {
             powerups.add();
         }
-        if (tick % 250 == 0) {
+        if ((tick + 100) % 250 == 0) {
+            // The +100 is so we get one on the first tick after the countdown.
             enemies.add();
         }
         tick++;
