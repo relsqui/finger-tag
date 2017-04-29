@@ -17,8 +17,8 @@ public class Velocity {
     }
 
     public void offset(float dx, float dy) {
-        this.x += dx;
-        this.y += dy;
+        // Using set instead of direct access so we respect the speed cap.
+        set(x + dx, y + dy);
     }
 
     public void bounceX() {

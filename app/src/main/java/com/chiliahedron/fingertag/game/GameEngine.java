@@ -55,7 +55,6 @@ public class GameEngine {
         if (players.size() == 0) {
             return false;
         }
-        tick++;
         enemies.update();
         players.update();
         powerups.update();
@@ -63,18 +62,19 @@ public class GameEngine {
             // We had some until we updated, so if there are none left they've lost.
             return true;
         }
-        if (tick % 50 == 0) {
+        if (tick != 0 && tick % 50 == 0) {
             score++;
             if (score > highScore) {
                 highScore = score;
             }
         }
-        if (tick % 320 == 0) {
+        if (tick != 0 && tick % 320 == 0) {
             powerups.add();
         }
         if (tick % 250 == 0) {
             enemies.add();
         }
+        tick++;
         return false;
     }
 
