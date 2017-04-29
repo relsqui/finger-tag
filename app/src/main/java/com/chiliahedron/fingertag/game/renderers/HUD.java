@@ -1,5 +1,6 @@
 package com.chiliahedron.fingertag.game.renderers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ public class HUD extends OrientationEventListener implements Renderer {
     private final RectF NATURAL;
     private final RectF SIDEWAYS;
     private int rotation;
+    private int original;
     private RectF drawBox;
     private GameEngine game;
     private Paint scorePaint = new Paint();
@@ -36,6 +38,7 @@ public class HUD extends OrientationEventListener implements Renderer {
         NATURAL = new RectF(0, 0, w, h);
         SIDEWAYS = new RectF(0 - d, d, w + d, h - d);
         drawBox = NATURAL;
+        original = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation() * 90;
         scorePaint.setColor(Color.WHITE);
         scorePaint.setTextSize(TEXT_SIZE);
         highScorePaint.setColor(Color.YELLOW);
@@ -79,6 +82,7 @@ public class HUD extends OrientationEventListener implements Renderer {
 
     public void onOrientationChanged(int orientation) {
         if (orientation == ORIENTATION_UNKNOWN) return;
+        orientation = (orientation + original) % 360;
         if (orientation > 315 || orientation <=45) {
             // Right-side up.
             rotation = 0;
