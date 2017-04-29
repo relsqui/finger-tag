@@ -149,16 +149,17 @@ public class GameEngine {
     }
 
     boolean handleTouchEvent(MotionEvent event) {
+        int index = MotionEventCompat.getActionIndex(event);
         switch (MotionEventCompat.getActionMasked(event)) {
             case MotionEvent.ACTION_DOWN:
-                // This is either the actual first touchWith of the game ...
-                if (players.size() == 0) {
-                    addPlayer(event.getX(), event.getY());
-                }
-                // ... or the first after a complete release.
-                // We can't tell which, so we have to give each player a chance to handle it.
+            case MotionEvent.ACTION_POINTER_DOWN:
+                boolean handled = false;
                 for (PlayerController playerController : playerControllers) {
-                    playerController.handleActionDown(event);
+                    handled = handled || playerController.handleActionDown(event);
+                }
+                if (!handled) {
+                    addPlayer(event.getX(index), event.getY(index));
+                    playerControllers.get(playerControllers.size()-1).handleActionDown(event);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -167,6 +168,7 @@ public class GameEngine {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
                 for (PlayerController playerController : playerControllers) {
                     playerController.handleActionUp(event);
                 }

@@ -18,20 +18,24 @@ public class PlayerController implements Controller {
 
     public void update() {}
 
-    public void handleActionDown(MotionEvent event) {
-        if (player.contains(new PointF(event.getX(), event.getY()))) {
-            player.touchWith(event.getPointerId(MotionEventCompat.getActionIndex(event)));
+    public boolean handleActionDown(MotionEvent event) {
+        // Return value is whether we handled this.
+        int index = MotionEventCompat.getActionIndex(event);
+        if (player.contains(new PointF(event.getX(index), event.getY(index)))) {
+            player.touchWith(event.getPointerId(index));
+            return true;
         }
+        return false;
     }
 
     public void handleActionMove(MotionEvent event) {
-        int pointerId = event.getPointerId(MotionEventCompat.getActionIndex(event));
-        if (player.touchedBy() == pointerId) {
-            float r = player.getRadius();
-            float x = Math.max(Math.min(event.getX(), game.getWidth() - r), r);
-            float y = Math.max(Math.min(event.getY(), game.getHeight() - r), r);
-            player.moveTo(x, y);
-        }
+        int pointerId = player.touchedBy();
+        if (pointerId == -1) return;
+        int index = event.findPointerIndex(player.touchedBy());
+        float r = player.getRadius();
+        float x = Math.max(Math.min(event.getX(index), game.getWidth() - r), r);
+        float y = Math.max(Math.min(event.getY(index), game.getHeight() - r), r);
+        player.moveTo(x, y);
     }
 
     public void handleActionUp(MotionEvent event) {
