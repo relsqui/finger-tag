@@ -14,6 +14,7 @@ public class HUD extends OrientationEventListener implements Renderer {
     private static final int TEXT_SIZE = 50;
     private static final int OUTLINE_THICKNESS = 10;
     private static final int MARGIN = 30;
+    private static final int LIFE_SIZE = 40;
     private final float LINE_HEIGHT;
     private final RectF PORTRAIT;
     private final RectF LANDSCAPE;
@@ -48,7 +49,6 @@ public class HUD extends OrientationEventListener implements Renderer {
         outline.setStrokeJoin(Paint.Join.ROUND);
         livesPaint.setColor(Color.GRAY);
         livesPaint.setStyle(Paint.Style.FILL);
-        livesPaint.setTextSize(TEXT_SIZE);
 
         // http://stackoverflow.com/a/42091739/252125
         Paint.FontMetrics fm = outline.getFontMetrics();
@@ -58,15 +58,26 @@ public class HUD extends OrientationEventListener implements Renderer {
     public void render(Canvas canvas) {
         canvas.save();
         canvas.rotate(rotation, canvas.getWidth()/2, canvas.getHeight()/2);
+        drawLives(canvas, livesPaint);
         topLeftText(canvas, 0, String.valueOf(game.getHighScore()), highScorePaint);
         topLeftText(canvas, 1, String.valueOf(game.getScore()), scorePaint);
-        topLeftText(canvas, 2, String.valueOf(game.getLives()), livesPaint);
         canvas.restore();
     }
 
     private void topLeftText(Canvas canvas, int row, String s, Paint paint) {
         canvas.drawText(s, fixX(MARGIN), fixY((row + 1) * LINE_HEIGHT), outline);
         canvas.drawText(s, fixX(MARGIN), fixY((row + 1) * LINE_HEIGHT), paint);
+    }
+
+    private void drawLives(Canvas canvas, Paint paint) {
+        float x = drawBox.right - MARGIN - LIFE_SIZE;
+        float y = MARGIN + LIFE_SIZE;
+        int step = MARGIN + (2 * LIFE_SIZE);
+        for (int i=0; i<game.getLives(); i++) {
+            canvas.drawCircle(x, y, LIFE_SIZE, outline);
+            canvas.drawCircle(x, y, LIFE_SIZE, paint);
+            x -= step;
+        }
     }
 
     public void onOrientationChanged(int orientation) {
