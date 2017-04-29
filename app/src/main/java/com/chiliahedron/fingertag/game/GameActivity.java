@@ -1,7 +1,9 @@
 package com.chiliahedron.fingertag.game;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,7 @@ public class GameActivity extends AppCompatActivity {
     GameEngine game = new GameEngine();
     GameView gameView;
 
+    @TargetApi(18)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,13 +27,15 @@ public class GameActivity extends AppCompatActivity {
         gameView = new GameView(this);
         gameView.setGame(game);
         setContentView(gameView);
+        // Lock the screen orientation for the game (the HUD will manage its own rotation).
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
     }
 
     @Override
     protected void onPause() {
+        // No parallel onResume because SurfaceView.onCreate is doing that work instead.
         super.onPause();
         gameView.stopThread();
-        // No parallel onResume because SurfaceView.onCreate is doing that work instead.
     }
 
     @Override
@@ -58,6 +63,8 @@ public class GameActivity extends AppCompatActivity {
         // Save state after so we get the high score and not the current score.
         saveState();
         startActivity(intent);
+        // Let the orientation change again.
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         finish();
     }
 

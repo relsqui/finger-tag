@@ -16,8 +16,8 @@ public class HUD extends OrientationEventListener implements Renderer {
     private static final int MARGIN = 30;
     private static final int LIFE_SIZE = 40;
     private final float LINE_HEIGHT;
-    private final RectF PORTRAIT;
-    private final RectF LANDSCAPE;
+    private final RectF NATURAL;
+    private final RectF SIDEWAYS;
     private int rotation;
     private RectF drawBox;
     private GameEngine game;
@@ -33,11 +33,9 @@ public class HUD extends OrientationEventListener implements Renderer {
         float w = game.getWidth();
         float h = game.getHeight();
         float d = (h-w)/2;
-        // For all we know these are actually the other way around.
-        // It doesn't actually matter, it's just "default" and "non-default" orientation.
-        PORTRAIT = new RectF(0, 0, w, h);
-        LANDSCAPE = new RectF(0 - d, d, w + d, h - d);
-        drawBox = PORTRAIT;
+        NATURAL = new RectF(0, 0, w, h);
+        SIDEWAYS = new RectF(0 - d, d, w + d, h - d);
+        drawBox = NATURAL;
         scorePaint.setColor(Color.WHITE);
         scorePaint.setTextSize(TEXT_SIZE);
         highScorePaint.setColor(Color.YELLOW);
@@ -71,10 +69,9 @@ public class HUD extends OrientationEventListener implements Renderer {
 
     private void drawLives(Canvas canvas, Paint paint) {
         float x = drawBox.right - MARGIN - LIFE_SIZE;
-        float y = MARGIN + LIFE_SIZE;
+        float y = drawBox.top + MARGIN + LIFE_SIZE;
         int step = MARGIN + (2 * LIFE_SIZE);
         for (int i=0; i<game.getLives(); i++) {
-            canvas.drawCircle(x, y, LIFE_SIZE, outline);
             canvas.drawCircle(x, y, LIFE_SIZE, paint);
             x -= step;
         }
@@ -85,19 +82,19 @@ public class HUD extends OrientationEventListener implements Renderer {
         if (orientation > 315 || orientation <=45) {
             // Right-side up.
             rotation = 0;
-            drawBox = PORTRAIT;
+            drawBox = NATURAL;
         } else if (orientation <= 135) {
             // Turned left, so rotate right.
             rotation = 270;
-            drawBox = LANDSCAPE;
+            drawBox = SIDEWAYS;
         } else if (orientation <= 225) {
             // Upside down.
             rotation = 180;
-            drawBox = PORTRAIT;
+            drawBox = NATURAL;
         } else {
             // Turned right, so rotate left.
             rotation = 90;
-            drawBox = LANDSCAPE;
+            drawBox = SIDEWAYS;
         }
     }
 

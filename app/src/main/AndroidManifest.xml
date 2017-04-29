@@ -15,10 +15,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".game.GameActivity"
-            android:screenOrientation="portrait">
-        </activity>
+        <activity android:name=".game.GameActivity" />
         <activity android:name=".Interstitial" />
     </application>
 
