@@ -41,14 +41,14 @@ public class EnemyController implements Controller {
             vel.bounceY();
         }
         enemy.step();
-        if (game.collidesWithEnemy(enemy)) {
+        if (game.getEnemies().collideWith(enemy)) {
             vel.bounceXY();
             enemy.step();
         }
     }
 
     private void wander() {
-        Player player = game.nearestPlayer(enemy);
+        Player player = game.getPlayers().nearest(enemy);
         if (player == null) return;
         float dx = random.nextFloat() * enemy.getFocus() * Math.signum(player.getX() - enemy.getX());
         float dy = random.nextFloat() * enemy.getFocus() * Math.signum(player.getY() - enemy.getY());

@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag.game.controllers;
+package com.chiliahedron.fingertag.game.controllers.managers;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +9,7 @@ import android.util.SparseBooleanArray;
 import android.view.MotionEvent;
 
 import com.chiliahedron.fingertag.game.GameEngine;
+import com.chiliahedron.fingertag.game.controllers.PlayerController;
 import com.chiliahedron.fingertag.game.models.Entity;
 import com.chiliahedron.fingertag.game.models.Player;
 import com.chiliahedron.fingertag.game.views.EntityRenderer;
@@ -59,7 +60,7 @@ public class PlayerManager {
             PlayerController controller = controllerIterator.next();
             EntityRenderer renderer = rendererIterator.next();
             controller.update();
-            if (game.collidesWithEnemy(player)) {
+            if (game.getEnemies().collideWith(player)) {
                 playerIterator.remove();
                 controllerIterator.remove();
                 rendererIterator.remove();
@@ -69,7 +70,7 @@ public class PlayerManager {
         }
     }
 
-    public boolean collideWith(Entity e, int buffer) {
+    boolean collideWith(Entity e, int buffer) {
         for (Player player : players) {
             if (player.overlaps(e, buffer) && e != player) {
                 return true;
