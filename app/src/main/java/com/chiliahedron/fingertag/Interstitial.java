@@ -19,13 +19,6 @@ public class Interstitial extends AppCompatActivity {
         scoreDisplay.append(": " + intent.getIntExtra("com.chiliahedron.fingertag.SCORE", 0));
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Go back to the splash screen, don't stay here.
-        finish();
-    }
-
     public void playAgain(View view) {
         startActivity(new Intent(this, GameActivity.class));
         finish();
