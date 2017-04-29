@@ -117,7 +117,7 @@ public class PlayerManager implements Controller, Renderer {
         for (PlayerController playerController : playerControllers) {
             handled = handled || playerController.handleActionDown(event);
         }
-        if (!handled) {
+        if (!handled && game.getJoinOK()) {
             add(event.getX(index), event.getY(index));
             playerControllers.get(playerControllers.size()-1).handleActionDown(event);
         }

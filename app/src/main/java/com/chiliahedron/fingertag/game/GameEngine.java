@@ -28,6 +28,7 @@ public class GameEngine {
     private PlayerManager players;
     private EnemyManager enemies;
     private PowerupManager powerups;
+    private boolean joinOK = true;
     private int highScore = 0;
     private int score = 0;
     private int lives = 3;
@@ -56,6 +57,11 @@ public class GameEngine {
         if (players.size() == 0) {
             return false;
         }
+        if (tick < 150) {
+            tick++;
+            return false;
+        }
+        joinOK = false;
         enemies.update();
         players.update();
         powerups.update();
@@ -157,4 +163,6 @@ public class GameEngine {
     public int getLives() { return lives; }
 
     public void addLives(int lives) { this.lives += lives; }
+
+    public boolean getJoinOK() { return joinOK; }
 }
