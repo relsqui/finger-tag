@@ -72,9 +72,9 @@ public class PowerupManager implements Controller, Renderer {
         int startIndex = random.nextInt(8);
         Powerup powerup;
         int powerupChoice = random.nextInt(100);
-        if (powerupChoice < 10) {
+        if (powerupChoice < 60) {
             powerup = new ExtraPoint(startPos[startIndex].x, startPos[startIndex].y);
-        } else if (powerupChoice < 20) {
+        } else if (powerupChoice < 90) {
             powerup = new SpawnEnemy(startPos[startIndex].x, startPos[startIndex].y);
         } else {
             powerup = new ExtraLife(startPos[startIndex].x, startPos[startIndex].y);
