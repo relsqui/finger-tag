@@ -4,7 +4,6 @@ import android.graphics.PointF;
 
 import com.chiliahedron.fingertag.game.GameEngine;
 import com.chiliahedron.fingertag.game.models.Player;
-import com.chiliahedron.fingertag.game.models.components.Position;
 import com.chiliahedron.fingertag.game.models.powerups.Powerup;
 
 import java.util.Random;
@@ -26,12 +25,14 @@ public class PowerupController implements Controller {
         float dx = 0;
         float dy = 0;
         if (game.getTick() % 55 == 0) {
-            dx += random.nextFloat() * 5 * Math.signum(target.x - powerup.getX());
-            dy += random.nextFloat() * 5 * Math.signum(target.y - powerup.getY());
+            // Occasional large changes towards the target.
+            dx += random.nextFloat() * 8 * Math.signum(target.x - powerup.getX());
+            dy += random.nextFloat() * 8 * Math.signum(target.y - powerup.getY());
         }
-        if (game.getTick() % 35 == 0) {
-            dx += random.nextFloat();
-            dy += random.nextFloat();
+        if (game.getTick() % 20 == 0) {
+            // Frequent random small changes.
+            dx += random.nextFloat() * 3;
+            dy += random.nextFloat() * 3;
         }
         powerup.getVel().offset(dx, dy);
         powerup.step();

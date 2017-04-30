@@ -5,7 +5,7 @@ import android.graphics.PointF;
 public class Velocity {
     private float x = 0;
     private float y = 0;
-    private float maxSpeed = 10;
+    private float maxSpeed = 15;
 
     public PointF getXY() {
         return new PointF(x, y);

@@ -46,10 +46,6 @@ public class GameEngine {
         players = new PlayerManager(this, DEFAULT_SIZE);
         enemies = new EnemyManager(this, DEFAULT_SIZE);
         powerups = new PowerupManager(this);
-        for (int i=0; i<score; i+=5) {
-            // This comes up if we're recreating a game after a pause.
-            enemies.add();
-        }
     }
 
     boolean update() {
@@ -67,6 +63,10 @@ public class GameEngine {
             }
             tick++;
             return false;
+        } else if (tick == 150) {
+            for (int i=0; i<3; i++) {
+                enemies.add();
+            }
         }
         fieldRenderer.setCountdown(0);
         joinOK = false;
@@ -86,7 +86,7 @@ public class GameEngine {
         if (tick != 0 && tick % 320 == 0) {
             powerups.add();
         }
-        if ((tick + 100) % 250 == 0) {
+        if (tick % 400 == 0) {
             // The +100 is so we get one on the first tick after the countdown.
             enemies.add();
         }

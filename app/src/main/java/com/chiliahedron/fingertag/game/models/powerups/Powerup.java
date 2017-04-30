@@ -9,7 +9,6 @@ abstract public class Powerup extends MovingEntity {
 
     Powerup(float x, float y) {
         super(DEFAULT_RADIUS, x, y);
-        vel.setMax(10);
     }
 
     abstract public void collect(GameEngine game, Entity entity);
