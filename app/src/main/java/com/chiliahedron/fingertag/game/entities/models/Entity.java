@@ -1,10 +1,10 @@
-package com.chiliahedron.fingertag.game.models;
+package com.chiliahedron.fingertag.game.entities.models;
 
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-import com.chiliahedron.fingertag.game.models.components.Position;
+import com.chiliahedron.fingertag.game.entities.models.components.Position;
 
 public class Entity {
     final int radius;

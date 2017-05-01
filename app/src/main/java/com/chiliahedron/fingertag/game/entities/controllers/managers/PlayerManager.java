@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag.game.controllers.managers;
+package com.chiliahedron.fingertag.game.entities.controllers.managers;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,13 +8,13 @@ import android.util.SparseBooleanArray;
 import android.view.MotionEvent;
 
 import com.chiliahedron.fingertag.game.GameEngine;
-import com.chiliahedron.fingertag.game.controllers.Controller;
-import com.chiliahedron.fingertag.game.controllers.PlayerController;
-import com.chiliahedron.fingertag.game.models.Enemy;
-import com.chiliahedron.fingertag.game.models.Entity;
-import com.chiliahedron.fingertag.game.models.Player;
-import com.chiliahedron.fingertag.game.renderers.EntityRenderer;
-import com.chiliahedron.fingertag.game.renderers.Renderer;
+import com.chiliahedron.fingertag.game.entities.controllers.Controller;
+import com.chiliahedron.fingertag.game.entities.controllers.PlayerController;
+import com.chiliahedron.fingertag.game.entities.models.Enemy;
+import com.chiliahedron.fingertag.game.entities.models.Entity;
+import com.chiliahedron.fingertag.game.entities.models.Player;
+import com.chiliahedron.fingertag.game.entities.renderers.EntityRenderer;
+import com.chiliahedron.fingertag.game.entities.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.chiliahedron.fingertag.game.models;
+package com.chiliahedron.fingertag.game.entities.models;
 
-import com.chiliahedron.fingertag.game.models.components.Velocity;
+import com.chiliahedron.fingertag.game.entities.models.components.Velocity;
 
 public class MovingEntity extends Entity {
     protected Velocity vel = new Velocity();

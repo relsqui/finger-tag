@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag.game.renderers;
+package com.chiliahedron.fingertag.game;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.graphics.RectF;
 import android.hardware.SensorManager;
 import android.view.OrientationEventListener;
 
-import com.chiliahedron.fingertag.game.GameEngine;
+import com.chiliahedron.fingertag.game.entities.renderers.Renderer;
 
 public class HUD extends OrientationEventListener implements Renderer {
     private static final int TEXT_SIZE = 50;

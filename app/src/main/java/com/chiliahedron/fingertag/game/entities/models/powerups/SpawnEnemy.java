@@ -1,9 +1,9 @@
-package com.chiliahedron.fingertag.game.models.powerups;
+package com.chiliahedron.fingertag.game.entities.models.powerups;
 
 import android.graphics.Color;
 
 import com.chiliahedron.fingertag.game.GameEngine;
-import com.chiliahedron.fingertag.game.models.Entity;
+import com.chiliahedron.fingertag.game.entities.models.Entity;
 
 public class SpawnEnemy extends Powerup {
     public SpawnEnemy(float x, float y) {

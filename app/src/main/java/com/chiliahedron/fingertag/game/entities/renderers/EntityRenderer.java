@@ -1,9 +1,9 @@
-package com.chiliahedron.fingertag.game.renderers;
+package com.chiliahedron.fingertag.game.entities.renderers;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.chiliahedron.fingertag.game.models.Entity;
+import com.chiliahedron.fingertag.game.entities.models.Entity;
 
 public class EntityRenderer implements Renderer {
     private Entity e;

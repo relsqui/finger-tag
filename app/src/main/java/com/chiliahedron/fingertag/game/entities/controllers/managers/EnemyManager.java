@@ -1,15 +1,15 @@
-package com.chiliahedron.fingertag.game.controllers.managers;
+package com.chiliahedron.fingertag.game.entities.controllers.managers;
 
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 
 import com.chiliahedron.fingertag.game.GameEngine;
-import com.chiliahedron.fingertag.game.controllers.Controller;
-import com.chiliahedron.fingertag.game.controllers.EnemyController;
-import com.chiliahedron.fingertag.game.models.Enemy;
-import com.chiliahedron.fingertag.game.models.Entity;
-import com.chiliahedron.fingertag.game.renderers.EntityRenderer;
-import com.chiliahedron.fingertag.game.renderers.Renderer;
+import com.chiliahedron.fingertag.game.entities.controllers.Controller;
+import com.chiliahedron.fingertag.game.entities.controllers.EnemyController;
+import com.chiliahedron.fingertag.game.entities.models.Enemy;
+import com.chiliahedron.fingertag.game.entities.models.Entity;
+import com.chiliahedron.fingertag.game.entities.renderers.EntityRenderer;
+import com.chiliahedron.fingertag.game.entities.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;

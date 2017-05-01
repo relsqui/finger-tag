@@ -1,17 +1,17 @@
-package com.chiliahedron.fingertag.game.controllers.managers;
+package com.chiliahedron.fingertag.game.entities.controllers.managers;
 
 import android.graphics.Canvas;
 import android.graphics.PointF;
 
 import com.chiliahedron.fingertag.game.GameEngine;
-import com.chiliahedron.fingertag.game.controllers.Controller;
-import com.chiliahedron.fingertag.game.controllers.PowerupController;
-import com.chiliahedron.fingertag.game.models.powerups.ExtraLife;
-import com.chiliahedron.fingertag.game.models.powerups.ExtraPoint;
-import com.chiliahedron.fingertag.game.models.powerups.Powerup;
-import com.chiliahedron.fingertag.game.models.powerups.SpawnEnemy;
-import com.chiliahedron.fingertag.game.renderers.EntityRenderer;
-import com.chiliahedron.fingertag.game.renderers.Renderer;
+import com.chiliahedron.fingertag.game.entities.controllers.Controller;
+import com.chiliahedron.fingertag.game.entities.controllers.PowerupController;
+import com.chiliahedron.fingertag.game.entities.models.powerups.ExtraLife;
+import com.chiliahedron.fingertag.game.entities.models.powerups.ExtraPoint;
+import com.chiliahedron.fingertag.game.entities.models.powerups.Powerup;
+import com.chiliahedron.fingertag.game.entities.models.powerups.SpawnEnemy;
+import com.chiliahedron.fingertag.game.entities.renderers.EntityRenderer;
+import com.chiliahedron.fingertag.game.entities.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.Iterator;

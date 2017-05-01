@@ -1,9 +1,9 @@
-package com.chiliahedron.fingertag.game.models.powerups;
+package com.chiliahedron.fingertag.game.entities.models.powerups;
 
 import android.graphics.Color;
 
 import com.chiliahedron.fingertag.game.GameEngine;
-import com.chiliahedron.fingertag.game.models.Entity;
+import com.chiliahedron.fingertag.game.entities.models.Entity;
 
 public class ExtraLife extends Powerup {
     public ExtraLife(float x, float y) {

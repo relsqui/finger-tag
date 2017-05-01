@@ -9,12 +9,11 @@ import android.support.v4.view.MotionEventCompat;
 import android.view.Display;
 import android.view.MotionEvent;
 
-import com.chiliahedron.fingertag.game.controllers.managers.EnemyManager;
-import com.chiliahedron.fingertag.game.controllers.managers.PlayerManager;
-import com.chiliahedron.fingertag.game.controllers.managers.PowerupManager;
-import com.chiliahedron.fingertag.game.models.Entity;
-import com.chiliahedron.fingertag.game.renderers.FieldRenderer;
-import com.chiliahedron.fingertag.game.renderers.HUD;
+import com.chiliahedron.fingertag.game.entities.controllers.managers.EnemyManager;
+import com.chiliahedron.fingertag.game.entities.controllers.managers.PlayerManager;
+import com.chiliahedron.fingertag.game.entities.controllers.managers.PowerupManager;
+import com.chiliahedron.fingertag.game.entities.models.Entity;
+import com.chiliahedron.fingertag.game.entities.renderers.FieldRenderer;
 
 import java.util.Random;
 

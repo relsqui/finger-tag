@@ -1,10 +1,10 @@
-package com.chiliahedron.fingertag.game.controllers;
+package com.chiliahedron.fingertag.game.entities.controllers;
 
 import android.graphics.PointF;
 
 import com.chiliahedron.fingertag.game.GameEngine;
-import com.chiliahedron.fingertag.game.models.Player;
-import com.chiliahedron.fingertag.game.models.powerups.Powerup;
+import com.chiliahedron.fingertag.game.entities.models.Player;
+import com.chiliahedron.fingertag.game.entities.models.powerups.Powerup;
 
 import java.util.Random;
 

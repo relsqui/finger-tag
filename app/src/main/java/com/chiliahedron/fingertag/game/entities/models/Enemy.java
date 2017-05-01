@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag.game.models;
+package com.chiliahedron.fingertag.game.entities.models;
 
 import android.graphics.Color;
 import android.graphics.Paint;

@@ -1,4 +1,4 @@
-package com.chiliahedron.fingertag.game.models.components;
+package com.chiliahedron.fingertag.game.entities.models.components;
 
 import android.graphics.PointF;
 
