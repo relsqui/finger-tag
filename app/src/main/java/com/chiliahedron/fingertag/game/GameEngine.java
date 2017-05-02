@@ -9,6 +9,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.view.Display;
 import android.view.MotionEvent;
 
+import com.chiliahedron.fingertag.game.clock.Clock;
 import com.chiliahedron.fingertag.game.entities.controllers.managers.EnemyManager;
 import com.chiliahedron.fingertag.game.entities.controllers.managers.PlayerManager;
 import com.chiliahedron.fingertag.game.entities.controllers.managers.PowerupManager;
@@ -22,6 +23,7 @@ public class GameEngine {
     private static final int DEFAULT_SIZE = 60;
     private int width = 0;
     private int height = 0;
+    private Clock clock = new Clock(random);
     private HUD hud;
     private FieldRenderer fieldRenderer;
     private PlayerManager players;
@@ -45,6 +47,7 @@ public class GameEngine {
         players = new PlayerManager(this, DEFAULT_SIZE);
         enemies = new EnemyManager(this, DEFAULT_SIZE);
         powerups = new PowerupManager(this);
+        clock.add(() -> hud.setDebug("foo"), 50, 0, false);
     }
 
     boolean update() {
@@ -52,6 +55,7 @@ public class GameEngine {
         if (players.size() == 0) {
             return false;
         }
+        clock.tick();
         if (tick < 150) {
             if (tick < 50) {
                 fieldRenderer.setCountdown(3);
@@ -148,13 +152,13 @@ public class GameEngine {
         return width;
     }
 
-    public int getHighScore() {
+    int getHighScore() {
         return highScore;
     }
 
     void setHighScore(int score) { highScore = score; }
 
-    public int getScore() {
+    int getScore() {
         return score;
     }
 

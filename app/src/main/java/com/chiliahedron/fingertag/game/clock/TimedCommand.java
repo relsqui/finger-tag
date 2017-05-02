@@ -6,16 +6,17 @@ class TimedCommand {
     private Command command;
     private int timer;
     private int variation;
-    private int nextExecution = 0;
     private boolean repeat;
     private Random random;
+    private int nextExecution = 0;
 
-    TimedCommand(Command command, int timer, int variation, boolean repeat, Random random) {
+    TimedCommand(Command command, int timer, int variation, boolean repeat, Random random, int tick) {
         this.command = command;
         this.timer = timer;
         this.variation = variation;
         this.repeat = repeat;
         this.random = random;
+        calculateNextExecution(tick);
     }
 
     boolean checkAndRun(int tick) {
@@ -30,11 +31,7 @@ class TimedCommand {
         return false;
     }
 
-    void calculateNextExecution(int currentTick) {
+    private void calculateNextExecution(int currentTick) {
         nextExecution = currentTick + timer + random.nextInt(variation * 2) - variation;
-    }
-
-    interface Command {
-        void execute();
     }
 }
