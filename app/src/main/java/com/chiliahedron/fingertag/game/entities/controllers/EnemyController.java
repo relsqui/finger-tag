@@ -23,12 +23,10 @@ public class EnemyController implements Controller {
         Velocity vel = enemy.getVel();
         float max = vel.getMax();
         vel.set((random.nextFloat() * 2 * max) - max, (random.nextFloat() * 2 * max) - max);
+        game.getClock().add(this::wander, enemy.getInertia(), enemy.getInertia(), 10);
     }
 
     public void update() {
-        if (game.getTick() % enemy.getInertia() == 0) {
-            wander();
-        }
         PointF posP = enemy.getXY();
         Velocity vel = enemy.getVel();
         PointF velP = vel.getXY();

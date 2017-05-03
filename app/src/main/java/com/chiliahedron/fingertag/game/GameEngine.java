@@ -33,7 +33,6 @@ public class GameEngine {
     private int highScore = 0;
     private int score = 0;
     private int lives = 3;
-    private long tick = 0;
 
     @TargetApi(17)
     public void setUp(Context context, Display display) {
@@ -88,12 +87,8 @@ public class GameEngine {
         enemies.update();
         players.update();
         powerups.update();
-        if (players.size() == 0) {
-            // We had some until we updated, so if there are none left they've lost.
-            return true;
-        }
-        tick++;
-        return false;
+        // If they're all gone, return true to end the game.
+        return players.size() == 0;
     }
 
     void render(Canvas canvas) {
@@ -167,13 +162,11 @@ public class GameEngine {
         return random;
     }
 
-    public long getTick() {
-        return tick;
-    }
-
     public int getLives() { return lives; }
 
     public void addLives(int lives) { this.lives += lives; }
 
     public boolean getJoinOK() { return joinOK; }
+
+    public Clock getClock() { return clock; }
 }

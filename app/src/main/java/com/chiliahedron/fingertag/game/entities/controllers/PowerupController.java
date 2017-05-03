@@ -19,22 +19,21 @@ public class PowerupController implements Controller {
         this.game = game;
         this.powerup = powerup;
         random = game.getRandom();
+        game.getClock().add(() -> {
+            // Occasional large changes towards the target.
+            float dx = random.nextFloat() * 8 * Math.signum(target.x - powerup.getX());
+            float dy = random.nextFloat() * 8 * Math.signum(target.y - powerup.getY());
+            powerup.getVel().offset(dx, dy);
+        }, 55, 50, 10);
+        game.getClock().add(() -> {
+            // Frequent random small changes.
+            float dx = random.nextFloat() * 2;
+            float dy = random.nextFloat() * 2;
+            powerup.getVel().offset(dx, dy);
+        }, 20, 20, 5);
     }
 
     public void update() {
-        float dx = 0;
-        float dy = 0;
-        if (game.getTick() % 55 == 0) {
-            // Occasional large changes towards the target.
-            dx += random.nextFloat() * 8 * Math.signum(target.x - powerup.getX());
-            dy += random.nextFloat() * 8 * Math.signum(target.y - powerup.getY());
-        }
-        if (game.getTick() % 20 == 0) {
-            // Frequent random small changes.
-            dx += random.nextFloat() * 3;
-            dy += random.nextFloat() * 3;
-        }
-        powerup.getVel().offset(dx, dy);
         powerup.step();
         Player nearestPlayer = game.getPlayers().nearest(powerup);
         if (nearestPlayer != null && nearestPlayer.overlaps(powerup)) {
