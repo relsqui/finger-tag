@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
 package com.chiliahedron.fingertag.game.entities.renderers;
 
 import android.graphics.Canvas;
@@ -5,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+/** A renderer for the game background. */
 public class FieldRenderer implements Renderer {
     private Paint bgPaint = new Paint();
     private Paint countdownPaint = new Paint();

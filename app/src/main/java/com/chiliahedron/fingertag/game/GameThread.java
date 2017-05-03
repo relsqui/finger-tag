@@ -1,9 +1,14 @@
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
 package com.chiliahedron.fingertag.game;
 
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+/** Asynchronously runs the main game loop. */
 class GameThread extends Thread {
     private static final String TAG = GameThread.class.getSimpleName();
     private static final int MAX_FPS = 50;
@@ -13,6 +18,12 @@ class GameThread extends Thread {
     private GameEngine game;
     private boolean finished = false;
 
+    /**
+     * Create a GameThread and determine the framePeriod from the FPS.
+     *
+     * @param sh  a {@link SurfaceHolder} for the surface onto which the game will be rendered.
+     * @param gameActivity  the {@link GameActivity} which is managing the game.
+     */
     GameThread(SurfaceHolder sh, GameActivity gameActivity) {
         super();
         this.sh = sh;
@@ -25,6 +36,18 @@ class GameThread extends Thread {
         this.game = game;
     }
 
+    /**
+     * Start the thread.
+     * <p>
+     * Once per framePeriod (1/MAX_FPS), this method does the following:
+     * <ul>
+     *     <li>Calls {@link GameEngine#update()}
+     *     <li>Locks the canvas provided by surfaceHolder
+     *     <li>Calls {@link GameEngine#render(Canvas)} on that canvas
+     *     <li>Sleeps for any remaining time in the framePeriod.
+     * </ul>
+     * This loop ends when something calls {@link #finish()}.
+     */
     @Override
     public void run() {
         Log.d(TAG, "Starting thread run.");

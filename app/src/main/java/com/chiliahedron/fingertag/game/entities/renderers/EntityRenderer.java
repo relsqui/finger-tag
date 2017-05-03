@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
 package com.chiliahedron.fingertag.game.entities.renderers;
 
 import android.graphics.Canvas;
@@ -5,6 +9,10 @@ import android.graphics.Paint;
 
 import com.chiliahedron.fingertag.game.entities.models.Entity;
 
+/**
+ * A renderer for small circles that have color and style information.
+ *
+ * @see Entity */
 public class EntityRenderer implements Renderer {
     private Entity e;
     private Paint paint = new Paint();

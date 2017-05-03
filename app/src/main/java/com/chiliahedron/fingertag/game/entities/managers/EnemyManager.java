@@ -1,4 +1,8 @@
-package com.chiliahedron.fingertag.game.entities.controllers.managers;
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
+package com.chiliahedron.fingertag.game.entities.managers;
 
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
@@ -15,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/** Handles the appearance and disappearance of enemies. */
 public class EnemyManager implements Controller, Renderer {
     private GameEngine game;
     private Random random;
@@ -29,6 +34,7 @@ public class EnemyManager implements Controller, Renderer {
         this.defaultSize = defaultSize;
     }
 
+    /** Add a new enemy at a random location which isn't too close to a player. */
     public void add() {
         Enemy enemy = new Enemy(defaultSize, 0, 0);
         enemy.getVel().set(random.nextFloat() * 20 - 10, random.nextFloat() * 20 - 10);
@@ -42,6 +48,12 @@ public class EnemyManager implements Controller, Renderer {
         enemyRenderers.add(new EntityRenderer(enemy));
     }
 
+    /**
+     * Find the nearest enemy to the given entity.
+     *
+     * @param e  the {@link Entity} to search near.
+     * @return the closest {@link Enemy}, if one exists, or null if there aren't any.
+     */
     @Nullable
     Enemy nearest(Entity e) {
         // Initialize minimum distance to the greatest possible distance between entities,
@@ -58,6 +70,11 @@ public class EnemyManager implements Controller, Renderer {
         return nearest;
     }
 
+    /**
+     * Remove the given enemy.
+     *
+     * @param enemy  the {@link Enemy} to remove.
+     */
     void remove(Enemy enemy) {
         int index = enemies.indexOf(enemy);
         enemies.remove(index);
@@ -65,6 +82,11 @@ public class EnemyManager implements Controller, Renderer {
         enemyRenderers.remove(index);
     }
 
+    /**
+     * Check whether the given entity collides with any enemy.
+     * @param e  the {@link Entity} to check collisions for.
+     * @return true if the entity collides with any enemy, false otherwise.
+     */
     public boolean collideWith(Entity e) {
         for (Entity enemy : enemies) {
             if (e.overlaps(enemy) && e != enemy) {
@@ -74,18 +96,25 @@ public class EnemyManager implements Controller, Renderer {
         return false;
     }
 
+    /** Remove all enemies. */
     public void clear() {
         enemies.clear();
         enemyControllers.clear();
         enemyRenderers.clear();
     }
 
+    /** Update each enemy. */
     public void update() {
         for (EnemyController enemy : enemyControllers) {
             enemy.update();
         }
     }
 
+    /**
+     * Render all enemies.
+     *
+     * @param canvas  the {@link Canvas} to render them onto.
+     */
     public void render(Canvas canvas) {
         for (EntityRenderer e : enemyRenderers) {
             e.render(canvas);

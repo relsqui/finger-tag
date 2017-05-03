@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
 package com.chiliahedron.fingertag.game.entities.controllers;
 
 import android.graphics.PointF;
@@ -8,6 +12,7 @@ import com.chiliahedron.fingertag.game.entities.models.powerups.Powerup;
 
 import java.util.Random;
 
+/** A controller for {@link Powerup}s. */
 public class PowerupController implements Controller {
     private GameEngine game;
     private Random random;
@@ -15,6 +20,12 @@ public class PowerupController implements Controller {
     private boolean collected = false;
     private PointF target = new PointF(0, 0);
 
+    /**
+     * Create a PowerupController.
+     *
+     * @param game  the {@link GameEngine} the powerup is in.
+     * @param powerup  the {@link Powerup} being controlled.
+     */
     public PowerupController(GameEngine game, Powerup powerup) {
         this.game = game;
         this.powerup = powerup;
@@ -33,6 +44,7 @@ public class PowerupController implements Controller {
         }, 20, 20, 5);
     }
 
+    /** Move the powerup and check if it has been collected. */
     public void update() {
         powerup.step();
         Player nearestPlayer = game.getPlayers().nearest(powerup);

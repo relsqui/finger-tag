@@ -1,4 +1,8 @@
-package com.chiliahedron.fingertag.game.entities.controllers.managers;
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
+package com.chiliahedron.fingertag.game.entities.managers;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+/** Handles players and therefore touch events. */
 public class PlayerManager implements Controller, Renderer {
     private GameEngine game;
     private int defaultSize;
@@ -40,6 +45,12 @@ public class PlayerManager implements Controller, Renderer {
         colors.put(Color.WHITE, true);
     }
 
+    /**
+     * Add a player at the specified location.
+     *
+     * @param x  the x position of the new player.
+     * @param y  the y position of the new player.
+     */
     private void add(float x, float y) {
         int availableIndex = colors.indexOfValue(true);
         // indexOfValue returns a negative if it can't find an appropriate key.
@@ -53,11 +64,11 @@ public class PlayerManager implements Controller, Renderer {
         players.add(player);
     }
 
+    /** Check each player for collisions and respond by removing a life or the player. */
     public void update() {
         ListIterator<Player> playerIterator = players.listIterator();
         ListIterator<PlayerController> controllerIterator = playerControllers.listIterator();
         ListIterator<EntityRenderer> rendererIterator = playerRenderers.listIterator();
-        // Using an iterator here instead of a for loop so we can modify the arrays on the fly.
         while (playerIterator.hasNext()) {
             Player player = playerIterator.next();
             PlayerController controller = controllerIterator.next();
@@ -73,13 +84,19 @@ public class PlayerManager implements Controller, Renderer {
                     playerIterator.remove();
                     controllerIterator.remove();
                     rendererIterator.remove();
-                    // Free up this player's color for another player.
                     colors.put(player.getColor(), true);
                 }
             }
         }
     }
 
+    /**
+     * Check if the given entity is within a buffer distance from any player.
+     *
+     * @param e  the {@link Entity} to check.
+     * @param buffer  the buffer size, in dp.
+     * @return true if the entity is sufficiently near any player, false otherwise.
+     */
     boolean collideWith(Entity e, int buffer) {
         for (Player player : players) {
             if (player.overlaps(e, buffer) && e != player) {
@@ -89,10 +106,16 @@ public class PlayerManager implements Controller, Renderer {
         return false;
     }
 
+    /**
+     * Find the nearest player to the given entity.
+     *
+     * @param e  the {@link Entity} to search near.
+     * @return the nearest {@link Player} if one exists, or null if there are none.
+     */
     @Nullable
     public Player nearest(Entity e) {
-        // Initialize minimum distance to the greatest possible distance between entities,
-        // so any actual distance we find will be shorter.
+        /* Initialize minimum distance to the greatest possible distance between entities,
+        so any actual distance we find will be shorter. */
         double minDistance = Math.max(game.getWidth(), game.getHeight());
         Player nearest = null;
         for (Player player : players) {
@@ -105,12 +128,22 @@ public class PlayerManager implements Controller, Renderer {
         return nearest;
     }
 
+    /**
+     * Render each player.
+     *
+     * @param canvas  the {@link Canvas} to render them onto.
+     */
     public void render(Canvas canvas) {
         for (EntityRenderer p : playerRenderers) {
             p.render(canvas);
         }
     }
 
+    /**
+     * Handle a touch event by either passing it to a {@link PlayerController} or spawning a player.
+     *
+     * @param event  the {@link MotionEvent} that occurred.
+     */
     public void handleActionDown(MotionEvent event) {
         int index = MotionEventCompat.getActionIndex(event);
         boolean handled = false;
@@ -126,12 +159,22 @@ public class PlayerManager implements Controller, Renderer {
         }
     }
 
+    /**
+     * Pass a touch movement to the player controllers to handle.
+     *
+     * @param event  the {@link MotionEvent} that occurred.
+     */
     public void handleActionMove(MotionEvent event) {
         for (PlayerController playerController : playerControllers) {
             playerController.handleActionMove(event);
         }
     }
 
+    /**
+     * Pass a touch release to the player controllers to handle.
+     *
+     * @param event  the {@link MotionEvent} that occurred.
+     */
     public void handleActionUp(MotionEvent event) {
         for (PlayerController playerController : playerControllers) {
             playerController.handleActionUp(event);

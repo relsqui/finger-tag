@@ -1,7 +1,12 @@
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
 package com.chiliahedron.fingertag.game.entities.models.components;
 
 import android.graphics.PointF;
 
+/** A position component for {@link com.chiliahedron.fingertag.game.entities.models.Entity}s. */
 public class Position {
     private float x = 0;
     private float y = 0;

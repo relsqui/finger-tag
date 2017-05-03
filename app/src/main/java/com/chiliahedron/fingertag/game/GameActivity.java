@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
 package com.chiliahedron.fingertag.game;
 
 import android.annotation.TargetApi;
@@ -6,21 +10,19 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.chiliahedron.fingertag.Interstitial;
 
-
+/** Activity which displays the game and saves/restores its state. */
 public class GameActivity extends AppCompatActivity {
-    public static final String TAG = GameActivity.class.getSimpleName();
     GameEngine game = new GameEngine();
     GameView gameView;
 
+    /** Retrieve state and lock the screen orientation. */
     @TargetApi(18)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "Activity created. Restoring state from preferences, if there is any.");
         SharedPreferences sharedPrefs = getSharedPreferences("com.chiliahedron.fingertag", MODE_PRIVATE);
         game.setHighScore(sharedPrefs.getInt("com.chiliahedron.fingertag.HIGH_SCORE", 0));
         game.addScore(sharedPrefs.getInt("com.chiliahedron.fingertag.CURRENT_SCORE", 0));
@@ -31,9 +33,9 @@ public class GameActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
     }
 
+    /** Kills the game thread when the activity is stopped. */
     @Override
     protected void onPause() {
-        // No parallel onResume because SurfaceView.onCreate is doing that work instead.
         super.onPause();
         gameView.stopThread();
     }
@@ -41,7 +43,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log.d(TAG, "Saving state from interrupted activity.");
         savedInstanceState.putInt("highScore", game.getScore());
         savedInstanceState.putInt("currentScore", game.getHighScore());
         saveState();
@@ -50,11 +51,11 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.d(TAG, "Restoring state from bundle.");
         game.setHighScore(savedInstanceState.getInt("highScore", 0));
         game.addScore(savedInstanceState.getInt("currentScore", 0));
     }
 
+    /** Saves state, resets the game, and ends the activity. */
     public void onGameFinished() {
         Intent intent = new Intent(this, Interstitial.class);
         intent.putExtra("com.chiliahedron.fingertag.SCORE", game.getScore());

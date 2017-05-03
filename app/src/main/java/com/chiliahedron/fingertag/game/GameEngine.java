@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
 package com.chiliahedron.fingertag.game;
 
 import android.annotation.TargetApi;
@@ -10,14 +14,15 @@ import android.view.Display;
 import android.view.MotionEvent;
 
 import com.chiliahedron.fingertag.game.clock.Clock;
-import com.chiliahedron.fingertag.game.entities.controllers.managers.EnemyManager;
-import com.chiliahedron.fingertag.game.entities.controllers.managers.PlayerManager;
-import com.chiliahedron.fingertag.game.entities.controllers.managers.PowerupManager;
+import com.chiliahedron.fingertag.game.entities.managers.EnemyManager;
+import com.chiliahedron.fingertag.game.entities.managers.PlayerManager;
+import com.chiliahedron.fingertag.game.entities.managers.PowerupManager;
 import com.chiliahedron.fingertag.game.entities.models.Entity;
 import com.chiliahedron.fingertag.game.entities.renderers.FieldRenderer;
 
 import java.util.Random;
 
+/** Manages the game logic, entities, and timing. */
 public class GameEngine {
     private static final Random random = new Random(System.currentTimeMillis());
     private static final int DEFAULT_SIZE = 60;
@@ -34,13 +39,23 @@ public class GameEngine {
     private int score = 0;
     private int lives = 3;
 
+    /**
+     * Initialize fields and subcomponents before beginning the game.
+     * <p>
+     * This method isn't a constructor because many of those initializations require information
+     * about the display which isn't available yet when this class is instantiated.
+     *
+     * @param context  The Activity which is managing the game.
+     * @param display  The Display we're being rendered onto.
+     * @see GameView#surfaceCreated(android.view.SurfaceHolder)
+     */
     @TargetApi(17)
     public void setUp(Context context, Display display) {
         Point realSize = new Point();
+        // Using getRealSize allows us to include the space behind the navigation bar.
         display.getRealSize(realSize);
         this.width = realSize.x;
         this.height = realSize.y;
-        // Initializing these down here because several of them need to know game dimensions.
         hud = new HUD(this, context);
         fieldRenderer = new FieldRenderer();
         players = new PlayerManager(this, DEFAULT_SIZE);
@@ -48,24 +63,23 @@ public class GameEngine {
         powerups = new PowerupManager(this);
     }
 
+    /** Configure all the timers that begin after the first player is added. */
     public void onFirstPlayer() {
-        // Set up the background countdown.
+        // The background countdown.
         fieldRenderer.setCountdown(3);
         clock.add(() -> fieldRenderer.setCountdown(2), 50, 0, 0);
         clock.add(() -> fieldRenderer.setCountdown(1), 100, 0, 0);
         clock.add(() -> fieldRenderer.setCountdown(0), 150, 0, 0);
 
-        // When the countdown ends, stop accepting new players ...
+        // Things that happen once after the countdown ends.
         clock.add(() -> joinOK = false, 150, 0, 0);
-
-        // ... and spawn three enemies.
         clock.add(() -> {
             for (int i=0; i<3; i++) {
                 enemies.add();
             }
         }, 150, 0, 0);
 
-        // Regular periodic random things.
+        // Things that happen periodically throughout the level.
         clock.add(() -> enemies.add(), 550, 400, 100);
         clock.add(() -> powerups.add(), 250, 400, 100);
         clock.add(() -> {
@@ -76,8 +90,12 @@ public class GameEngine {
         }, 200, 50, 0);
     }
 
+    /**
+     * Update the game state (move entities, check collisions, execute timers, and so on).
+     *
+     * @return true if the game is over, false if it should continue.
+     */
     boolean update() {
-        // Returns true when the game has ended, false otherwise.
         if (players.size() == 0) {
             // If we have no players yet but are updating, game hasn't started yet.
             // Don't proceed until we get a touch event, which will create a player.
@@ -87,10 +105,14 @@ public class GameEngine {
         enemies.update();
         players.update();
         powerups.update();
-        // If they're all gone, return true to end the game.
         return players.size() == 0;
     }
 
+    /**
+     * Render all the visible game elements.
+     *
+     * @param canvas  the {@link Canvas} to render them onto.
+     */
     void render(Canvas canvas) {
         fieldRenderer.render(canvas);
         enemies.render(canvas);
@@ -99,6 +121,12 @@ public class GameEngine {
         hud.render(canvas);
     }
 
+    /**
+     * Catch touch events and pass them through to the player manager.
+     *
+     * @param event  The {@link MotionEvent} that occurred.
+     * @return true to consume the event after we've handled it.
+     */
     boolean handleTouchEvent(MotionEvent event) {
         switch (MotionEventCompat.getActionMasked(event)) {
             case MotionEvent.ACTION_DOWN:
@@ -116,6 +144,7 @@ public class GameEngine {
         return true;
     }
 
+    /** Clear the game state so it can be played again. */
     void clearState() {
         score = 0;
         lives = 3;
@@ -123,6 +152,12 @@ public class GameEngine {
         powerups.clear();
     }
 
+    /**
+     * Check whether an Entity is visible on the screen.
+     *
+     * @param e  an Entity.
+     * @return true if the entity is visible, false otherwise.
+     */
     public boolean visible(Entity e) {
         PointF pos = e.getXY();
         int radius = e.getRadius();

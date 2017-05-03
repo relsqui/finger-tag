@@ -1,4 +1,8 @@
-package com.chiliahedron.fingertag.game.entities.controllers.managers;
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
+package com.chiliahedron.fingertag.game.entities.managers;
 
 import android.graphics.Canvas;
 import android.graphics.PointF;
@@ -18,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+/** Handles the appearance and disappearance of powerups. */
 public class PowerupManager implements Controller, Renderer {
     private GameEngine game;
     private Random random;
@@ -68,6 +73,7 @@ public class PowerupManager implements Controller, Renderer {
         target[7] = new PointF(-20, h/2);
     }
 
+    /** Spawn a powerup, chosen at (weighted) random. */
     public void add() {
         int startIndex = random.nextInt(8);
         Powerup powerup;
@@ -85,6 +91,7 @@ public class PowerupManager implements Controller, Renderer {
         renderers.add(new EntityRenderer(powerup));
     }
 
+    /** Update each powerup, removing any that have been collected or gone offscreen. */
     public void update() {
         Iterator<PowerupController> powerupIterator = controllers.iterator();
         Iterator<EntityRenderer> rendererIterator = renderers.iterator();
@@ -99,12 +106,18 @@ public class PowerupManager implements Controller, Renderer {
         }
     }
 
+    /**
+     * Render all the powerups.
+     *
+     * @param canvas  the {@link Canvas} to render them onto.
+     */
     public void render(Canvas canvas) {
         for (EntityRenderer renderer : renderers) {
             renderer.render(canvas);
         }
     }
 
+    /** Remove all the powerups. */
     public void clear() {
         controllers.clear();
         renderers.clear();

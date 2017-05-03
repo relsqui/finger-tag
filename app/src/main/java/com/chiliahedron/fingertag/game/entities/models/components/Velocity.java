@@ -1,7 +1,16 @@
+/*
+ * Copyright (c) 2017 Finn Ellis.
+ */
+
 package com.chiliahedron.fingertag.game.entities.models.components;
 
 import android.graphics.PointF;
 
+/**
+ * A velocity component for {@link com.chiliahedron.fingertag.game.entities.models.Entity}s.
+ *
+ * @see com.chiliahedron.fingertag.game.entities.models.MovingEntity
+ */
 public class Velocity {
     private float x = 0;
     private float y = 0;
@@ -21,22 +30,23 @@ public class Velocity {
         set(x + dx, y + dy);
     }
 
+    /** Reverse the direction of the x component. */
     public void bounceX() {
         x *= -1;
     }
 
+    /** Reverse the direction of the y component. */
     public void bounceY() {
         y *= -1;
     }
 
+    /** Reverse direction in both dimensions. */
     public void bounceXY() {
-        bounceX();
-        bounceY();
+        x *= -1;
+        y *= -1;
     }
 
     public float getMax() {
         return maxSpeed;
     }
-
-    public void setMax(float maxSpeed) { this.maxSpeed = maxSpeed; }
 }
