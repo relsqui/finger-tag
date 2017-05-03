@@ -4,25 +4,25 @@ import java.util.Random;
 
 class TimedCommand {
     private Command command;
-    private int timer;
+    private int firstTime;
     private int variation;
-    private boolean repeat;
+    private int repeatEvery;
     private Random random;
     private int nextExecution = 0;
 
-    TimedCommand(Command command, int timer, int variation, boolean repeat, Random random, int tick) {
+    TimedCommand(Command command, int firstTime, int repeatEvery, int variation, Random random, int tick) {
         this.command = command;
-        this.timer = timer;
+        this.firstTime = firstTime;
         this.variation = variation;
-        this.repeat = repeat;
+        this.repeatEvery = repeatEvery;
         this.random = random;
-        calculateNextExecution(tick);
+        nextExecution = tick + firstTime;
     }
 
     boolean checkAndRun(int tick) {
         if (tick == nextExecution) {
             command.execute();
-            if (repeat) {
+            if (repeatEvery > 0) {
                 calculateNextExecution(tick);
             } else {
                 return true;
@@ -32,6 +32,9 @@ class TimedCommand {
     }
 
     private void calculateNextExecution(int currentTick) {
-        nextExecution = currentTick + timer + random.nextInt(variation * 2) - variation;
+        nextExecution = currentTick + repeatEvery;
+        if (variation > 0) {
+            nextExecution += random.nextInt(variation * 2) - variation;
+        }
     }
 }

@@ -27,7 +27,6 @@ class HUD extends OrientationEventListener implements Renderer {
     private Paint highScorePaint = new Paint();
     private Paint outline = new Paint();
     private Paint livesPaint = new Paint();
-    private String debug = null;
 
     HUD(GameEngine game, Context context) {
         super(context, SensorManager.SENSOR_DELAY_GAME);
@@ -63,9 +62,6 @@ class HUD extends OrientationEventListener implements Renderer {
         drawLives(canvas, livesPaint);
         topLeftText(canvas, 0, String.valueOf(game.getHighScore()), highScorePaint);
         topLeftText(canvas, 1, String.valueOf(game.getScore()), scorePaint);
-        if (debug != null) {
-            topLeftText(canvas, 2, debug, highScorePaint);
-        }
         canvas.restore();
     }
 
@@ -104,10 +100,6 @@ class HUD extends OrientationEventListener implements Renderer {
             rotation = 90;
             drawBox = SIDEWAYS;
         }
-    }
-
-    void setDebug(String debug) {
-        this.debug = debug;
     }
 
     private float fixX(float x) {

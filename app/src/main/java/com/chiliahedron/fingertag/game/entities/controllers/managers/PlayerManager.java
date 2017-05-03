@@ -120,6 +120,9 @@ public class PlayerManager implements Controller, Renderer {
         if (!handled && game.getJoinOK()) {
             add(event.getX(index), event.getY(index));
             playerControllers.get(playerControllers.size()-1).handleActionDown(event);
+            if (players.size() == 1) {
+                game.onFirstPlayer();
+            }
         }
     }
 

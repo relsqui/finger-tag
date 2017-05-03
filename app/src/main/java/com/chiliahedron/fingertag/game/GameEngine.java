@@ -47,51 +47,50 @@ public class GameEngine {
         players = new PlayerManager(this, DEFAULT_SIZE);
         enemies = new EnemyManager(this, DEFAULT_SIZE);
         powerups = new PowerupManager(this);
-        clock.add(() -> hud.setDebug("foo"), 50, 0, false);
+    }
+
+    public void onFirstPlayer() {
+        // Set up the background countdown.
+        fieldRenderer.setCountdown(3);
+        clock.add(() -> fieldRenderer.setCountdown(2), 50, 0, 0);
+        clock.add(() -> fieldRenderer.setCountdown(1), 100, 0, 0);
+        clock.add(() -> fieldRenderer.setCountdown(0), 150, 0, 0);
+
+        // When the countdown ends, stop accepting new players ...
+        clock.add(() -> joinOK = false, 150, 0, 0);
+
+        // ... and spawn three enemies.
+        clock.add(() -> {
+            for (int i=0; i<3; i++) {
+                enemies.add();
+            }
+        }, 150, 0, 0);
+
+        // Regular periodic random things.
+        clock.add(() -> enemies.add(), 550, 400, 100);
+        clock.add(() -> powerups.add(), 250, 400, 100);
+        clock.add(() -> {
+            score++;
+            if (score > highScore) {
+                highScore = score;
+            }
+        }, 200, 50, 0);
     }
 
     boolean update() {
         // Returns true when the game has ended, false otherwise.
         if (players.size() == 0) {
+            // If we have no players yet but are updating, game hasn't started yet.
+            // Don't proceed until we get a touch event, which will create a player.
             return false;
         }
         clock.tick();
-        if (tick < 150) {
-            if (tick < 50) {
-                fieldRenderer.setCountdown(3);
-            } else if (tick < 100) {
-                fieldRenderer.setCountdown(2);
-            } else {
-                fieldRenderer.setCountdown(1);
-            }
-            tick++;
-            return false;
-        } else if (tick == 150) {
-            for (int i=0; i<3; i++) {
-                enemies.add();
-            }
-        }
-        fieldRenderer.setCountdown(0);
-        joinOK = false;
         enemies.update();
         players.update();
         powerups.update();
         if (players.size() == 0) {
             // We had some until we updated, so if there are none left they've lost.
             return true;
-        }
-        if (tick != 0 && tick % 50 == 0) {
-            score++;
-            if (score > highScore) {
-                highScore = score;
-            }
-        }
-        if (tick != 0 && tick % 320 == 0) {
-            powerups.add();
-        }
-        if (tick % 400 == 0) {
-            // The +100 is so we get one on the first tick after the countdown.
-            enemies.add();
         }
         tick++;
         return false;

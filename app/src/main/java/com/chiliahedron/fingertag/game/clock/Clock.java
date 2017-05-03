@@ -14,8 +14,8 @@ public class Clock {
         this.random = random;
     }
 
-    public void add(Command command, int timer, int variation, boolean repeat) {
-        commands.add(new TimedCommand(command, timer, variation, repeat, random, tick));
+    public void add(Command command, int firstTime, int repeatEvery, int variation) {
+        commands.add(new TimedCommand(command, firstTime, repeatEvery, variation, random, tick));
     }
 
     public void tick() {
