@@ -20,8 +20,10 @@ public class SplashScreen extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         TextView scoreView = (TextView) findViewById(R.id.splashScoreView);
-        SharedPreferences sharedPrefs = getSharedPreferences("com.chiliahedron.fingertag", MODE_PRIVATE);
-        scoreView.setText(getString(R.string.high_score) + ": " + sharedPrefs.getInt("com.chiliahedron.fingertag.HIGH_SCORE", 0));
+        SharedPreferences sharedPrefs = getSharedPreferences("com.chiliahedron.fingertag",
+                                                             MODE_PRIVATE);
+        scoreView.setText(getString(R.string.high_score,
+                sharedPrefs.getInt("com.chiliahedron.fingertag.HIGH_SCORE", 0)));
     }
 
     public void startGame(View view) {

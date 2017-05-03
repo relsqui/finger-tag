@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Finger Tag</string>
+    <!-- Start button on splash screen. -->
     <string name="start">Start</string>
-    <string name="high_score">High Score</string>
-    <string name="your_score">Your Score</string>
-    <string name="play_again">Play Again</string>
+    <!-- Restart button on interstitial screen. -->
+    <string name="play_again">Play again</string>
+    <!-- Score displays on splash and interstitial screens. -->
+    <string name="high_score">High Score: %1$d</string>
+    <string name="your_score">Your Score: %1$d</string>
 </resources>

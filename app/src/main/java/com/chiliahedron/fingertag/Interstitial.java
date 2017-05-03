@@ -16,7 +16,8 @@ public class Interstitial extends AppCompatActivity {
         setContentView(R.layout.activity_interstitial);
         Intent intent = getIntent();
         TextView scoreDisplay = (TextView) findViewById(R.id.interScoreDisplay);
-        scoreDisplay.append(": " + intent.getIntExtra("com.chiliahedron.fingertag.SCORE", 0));
+        scoreDisplay.setText(getString(R.string.your_score,
+                intent.getIntExtra("com.chiliahedron.fingertag.SCORE", 0)));
     }
 
     public void playAgain(View view) {
